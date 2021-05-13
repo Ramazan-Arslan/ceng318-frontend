@@ -23,6 +23,8 @@
 }
 .user-info {
   display: flex;
+  align-items: center;
+  
 }
 
 .user-name-surname {
@@ -30,6 +32,8 @@
   padding: 15px;
   position: relative;
 }
-.logout-button {
-  background-color: blue !important;
+.MuiButton-containedPrimary {
+margin-right: 20px !important;
+background-color: #3E64FF !important;
 }
+

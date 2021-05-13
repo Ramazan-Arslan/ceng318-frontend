@@ -47,7 +47,9 @@ export default function Header() {
       </div>
       <div className='user-info'>
         <p className='user-name-surname'>Ramazan Arslan</p>
-        <Button className='logout-button'>Log Out</Button>
+        <Button variant="contained" color="primary">
+          Log out
+        </Button>
       </div>
     </div>
   )
