@@ -3,6 +3,7 @@ import Calendar from '../calendar.component/calendar.component'
 import './header.component.css'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
+import CreateAppointment from '../create-appoinment/create-appointment'
 
 const routes = [
   {
@@ -14,8 +15,8 @@ const routes = [
   {
     key: 2,
     name: 'Create Appointment',
-    path: '/calendar',
-    component: Calendar,
+    path: '/createAppointment',
+    component: CreateAppointment,
   },
 ]
 
@@ -46,10 +47,8 @@ export default function Header() {
         </Router>
       </div>
       <div className='user-info'>
-        <p className='user-name-surname'>Ramazan Arslan</p>
-        <Button variant="contained" color="primary">
-          Log out
-        </Button>
+        <p className='user-name-surname'>AMcık Furkan</p>
+        <Button variant='contained'>Log out</Button>
       </div>
     </div>
   )
