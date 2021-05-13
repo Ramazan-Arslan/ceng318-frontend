@@ -1,53 +1,50 @@
 .create-appointment {
-    font-weight: bold;
-    text-align: start;
-    background-color: white;
-    width: 100%;
-    height: 92%;
-    top:8%;
-    position: fixed;
-    display: flex;
-    justify-content: center;
-  }
-  .create-appointment-left{
-    width: 45%;
-  
-  }
-  .create-appointment-right{
-    width: 45%;
-  }
-  
-  .form-titles{
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    color: #222B45;
-    margin-bottom: 0;
-  }
-  .form-titles-header{
-    font-size: 24px;
+  font-weight: bold;
+  text-align: start;
+  background-color: white;
+  width: 100%;
+  height: 93%;
+  top: 7%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+}
+.create-appointment-left {
+  width: 45%;
+}
+.create-appointment-right {
+  width: 45%;
+}
 
-  }
-  .avaible-time > button{
-    margin: 5px 15px;
-  }
-  .description-field{
-    min-height: 100px !important;
-  }
+.form-titles {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  color: #222b45;
+  margin-bottom: 0;
+}
+.form-titles-header {
+  font-size: 24px;
+}
+.avaible-time > button {
+  margin: 5px 15px;
+}
+.description-field {
+  min-height: 100px !important;
+}
 
-  
-.MuiButton-containedPrimary {  
-    background-color: #3E64FF !important;
-    width: 350px !important;
-    padding: 15px 20px !important;
-    border-radius: 20px !important;
-    margin-top: 15px !important;
+.MuiButton-containedPrimary {
+  background-color: #3e64ff !important;
+  width: 350px !important;
+  padding: 15px 20px !important;
+  border-radius: 20px !important;
+  margin-top: 15px !important;
 }
 .MuiButton-containedSecondary {
-  background-color: #BE123C !important;
+  background-color: #be123c !important;
 }
 .MuiFormGroup-root {
-  color: #222B45 !important;
+  color: #222b45 !important;
   flex-direction: row !important;
 }
 .MuiOutlinedInput-input {
@@ -58,4 +55,3 @@
 .MuiFilledInput-multiline {
   background: rgba(107, 119, 154, 0.05) !important;
 }
-  
