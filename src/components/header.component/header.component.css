@@ -24,7 +24,6 @@
 .user-info {
   display: flex;
   align-items: center;
-  
 }
 
 .user-name-surname {
@@ -32,8 +31,8 @@
   padding: 15px;
   position: relative;
 }
-.MuiButton-containedPrimary {
-margin-right: 20px !important;
-background-color: #3E64FF !important;
+.MuiButton-contained {
+  margin-right: 20px !important;
+  background-color: #3e64ff !important;
+  color: white !important;
 }
-
