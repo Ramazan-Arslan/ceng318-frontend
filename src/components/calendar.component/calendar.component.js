@@ -37,6 +37,10 @@ export default function CalendarPage(props) {
   const [showTreatmentType, setShowTreatmentType] = useState(true)
   const [patient, setPatient] = useState('')
 
+  const onEventClick = (event) => {
+    alert(event.id + ' ' + event.title + ' ' + event.start + ' ' + event.end) //Shows the event details provided while booking
+  }
+
   const [state, setState] = React.useState({
     dentist1: true,
     dentist2: true,
@@ -181,14 +185,14 @@ export default function CalendarPage(props) {
         <Calendar
           localizer={localizer}
           events={events}
-          defaultView={'mount'}
+          defaultView={'month'}
           step={60}
           style={style}
           showMultiDayTimes
+          onSelectEvent={(event) => onEventClick(event)}
           components={{
             timeSlotWrapper: ColoredDateCellWrapper,
           }}
-          onSelectEvent={showPopup}
           startAccessor='start'
           endAccessor='end'
           style={{ height: 550, width: 1200 }}
