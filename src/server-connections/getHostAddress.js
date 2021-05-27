@@ -1,4 +1,4 @@
 const getHostAddress = () => {
-    return 'http://127.0.0.1:8001';
+    return 'http://izmir4.parta.com.tr:8080';
 }
 export default getHostAddress;

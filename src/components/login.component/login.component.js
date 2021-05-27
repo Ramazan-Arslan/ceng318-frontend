@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
-import postRequest from '../../server-connections/postRequest'
 import helpers from './login.component.helper'
 import './login.component.css'
 
@@ -13,8 +12,12 @@ export default function Login() {
   function login() {
     var json =
     {
-      email: userEmail,
-      password: userPassword
+      userData:
+      {
+        email: userEmail,
+       password: userPassword
+      }
+      
     }
     helpers.authentication(json);
   }
@@ -45,7 +48,7 @@ export default function Login() {
             setPassword(event.target.value)
           }}
         />
-        <Button className='login-button'>
+        <Button className='login-button' onClick={login}>
           <p style={{ fontWeight: 'Bold' }}>Log In</p>
         </Button>
       </div>

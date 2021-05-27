@@ -14,7 +14,11 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
+import helpers from './create-appointment-helper';
 
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -64,13 +68,17 @@ export default function CreateAppointment() {
       var json = 
       {
         selectedDate : dateLong,
-        name : name,
-        gender : gender,
-        phoneNumber : phoneNumber,
-        age : age,
-        type : typeOfTreatment,
+        patient_name : name,
+        patient_gender : gender,
+        hour : "12:00-13:00",
+        doctor : "213", // id // doktor çekilecek
+        patient_phone : phoneNumber,
+        patient_age : age,
+        type : 1, // id konulacak
         description : description
       }
+
+      helpers.createAppointment(json);
     }
     else
     {
@@ -89,7 +97,7 @@ export default function CreateAppointment() {
             label="Date picker dialog"
             format="MM/dd/yyyy"
             value={selectedDate}
-            onChange={(date) => {handleDateChange(date)}
+            onChange={(date) => {handleDateChange(date)}}
             KeyboardButtonProps={{
               "aria-label": "change date",
             }}
@@ -158,12 +166,18 @@ export default function CreateAppointment() {
         </FormControl>
 
         <p className="form-titles">Type of Treatment</p>
-        <TextField
-          defaultValue={typeOfTreatment}
+
+        <Select
+        className="type-of-treatment"
+          value={typeOfTreatment}
           margin="normal"
           variant="outlined"
           onChange={(event) => { handleTypeOfTreatmentChange(event.target.value) }}
-        />
+        >
+          <MenuItem value={"Kanal Tedavisi"}>Kanal Tedavisi</MenuItem>
+          <MenuItem value={"Diş beyazlatma"}>Diş beyazlatma</MenuItem>
+          <MenuItem value={"Diş bakımı"}>Diş bakımı</MenuItem>
+        </Select>
 
         <p className="form-titles">Phone Number</p>
         <TextField
