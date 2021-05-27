@@ -16,6 +16,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import helpers from './create-appointment-helper';
 
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [name, setName] = useState("");
@@ -162,12 +166,18 @@ export default function CreateAppointment() {
         </FormControl>
 
         <p className="form-titles">Type of Treatment</p>
-        <TextField
-          defaultValue={typeOfTreatment}
+
+        <Select
+        className="type-of-treatment"
+          value={typeOfTreatment}
           margin="normal"
           variant="outlined"
           onChange={(event) => { handleTypeOfTreatmentChange(event.target.value) }}
-        />
+        >
+          <MenuItem value={"Kanal Tedavisi"}>Kanal Tedavisi</MenuItem>
+          <MenuItem value={"Diş beyazlatma"}>Diş beyazlatma</MenuItem>
+          <MenuItem value={"Diş bakımı"}>Diş bakımı</MenuItem>
+        </Select>
 
         <p className="form-titles">Phone Number</p>
         <TextField
