@@ -73,7 +73,7 @@ export default function CalendarPage(props) {
         </form>
         <div className='choose-dentist'>
           <Button
-            className='choose dentist-button'
+            className='choose-dentist-button'
             variant='contained'
             onClick={() => setShowDentist(!showDentist)}
           >
@@ -123,7 +123,7 @@ export default function CalendarPage(props) {
           <Button
             variant='contained'
             onClick={() => setShowTreatmentType(!showTreatmentType)}
-            className='choose treatment-type-button'
+            className='choose-treatment-type-button'
           >
             Treatment Type
           </Button>

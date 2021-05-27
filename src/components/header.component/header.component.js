@@ -47,7 +47,7 @@ export default function Header() {
         </Router>
       </div>
       <div className='user-info'>
-        <p className='user-name-surname'>AMcık Furkan</p>
+        <p className='user-name-surname'>RAMCık Bekir</p>
         <Button className='logout-button' variant='contained'>
           Log out
         </Button>

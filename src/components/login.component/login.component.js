@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import postRequest from '../../server-connections/postRequest'
+import helpers from './login.component.helper'
 import './login.component.css'
+
 
 export default function Login() {
   const [userEmail, setEmail] = useState('')
   const [userPassword, setPassword] = useState('')
+
+  function login() {
+    var json =
+    {
+      email: userEmail,
+      password: userPassword
+    }
+    helpers.authentication(json);
+  }
 
   return (
     <div className='login'>

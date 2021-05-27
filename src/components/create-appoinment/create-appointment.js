@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState, useEffect } from 'react';
 import "./create-appointment.css";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -16,18 +17,67 @@ import FormControl from "@material-ui/core/FormControl";
 
 
 export default function CreateAppointment() {
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2014-08-18T21:11:54")
-  );
-  const [value, setValue] = React.useState("female");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [typeOfTreatment, setTypeOfTreatment] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
   };
+
+  const handleNameChange = (name) => {
+    setName(name);
+  };
+
+  const handleAgeChange = (age) => {
+    setAge(age);
+  };
+
+  const handleDescriptionChange = (description) => {
+    setDescription(description);
+  };
+
+  const handlePhoneNumberChange = (number) => {
+    setPhoneNumber(number);
+  };
+
+  const handleTypeOfTreatmentChange = (type) => {
+    setTypeOfTreatment(type);
+  };
+
+  function onClickSetAppointment()
+  {
+    var isInputOK = Boolean(selectedDate.getTime()) && Boolean(name) && Boolean(age) && Boolean(gender) 
+    && Boolean(description) && Boolean(typeOfTreatment) && Boolean(phoneNumber)
+
+    if (isInputOK)
+    {
+      var dateLong = selectedDate.getTime();
+      var json = 
+      {
+        selectedDate : dateLong,
+        name : name,
+        gender : gender,
+        phoneNumber : phoneNumber,
+        age : age,
+        type : typeOfTreatment,
+        description : description
+      }
+    }
+    else
+    {
+      alert("There exists empty inputs !");
+    }
+  }
+
 
   return (
     <div className="create-appointment">
@@ -39,12 +89,13 @@ export default function CreateAppointment() {
             label="Date picker dialog"
             format="MM/dd/yyyy"
             value={selectedDate}
-            onChange={handleDateChange}
+            onChange={(date) => {handleDateChange(date)}
             KeyboardButtonProps={{
               "aria-label": "change date",
             }}
           />
         </MuiPickersUtilsProvider>
+
         <div className="avaible-time">
           <p className="form-titles">Available Time</p>
           <Button variant="outlined" color="primary">
@@ -69,20 +120,33 @@ export default function CreateAppointment() {
             16.00 - 17.00 AM
           </Button>
         </div>
+
         <p className="form-titles form-titles-header">Patient Details</p>
         <p className="form-titles">Full Name</p>
-        <TextField defaultValue="" margin="normal" variant="outlined" />
+        <TextField
+          defaultValue={name}
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => { handleNameChange(event.target.value) }} />
+
         <p className="form-titles">Age</p>
-        <TextField defaultValue="" margin="normal" variant="outlined" />
+        <TextField
+          defaultValue={age}
+          type="number"
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => { handleAgeChange(event.target.value) }} />
       </div>
+
       <div className="create-appointment-right">
         <FormControl component="fieldset">
+
           <p className="form-titles">Gender</p>
           <RadioGroup
             aria-label="gender"
             name="gender1"
-            value={value}
-            onChange={handleChange}
+            value={gender}
+            onChange={handleGenderChange}
           >
             <FormControlLabel
               value="female"
@@ -92,13 +156,36 @@ export default function CreateAppointment() {
             <FormControlLabel value="male" control={<Radio />} label="Male" />
           </RadioGroup>
         </FormControl>
+
         <p className="form-titles">Type of Treatment</p>
-        <TextField defaultValue="" margin="normal" variant="outlined" />
+        <TextField
+          defaultValue={typeOfTreatment}
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => { handleTypeOfTreatmentChange(event.target.value) }}
+        />
+
         <p className="form-titles">Phone Number</p>
-        <TextField defaultValue="" margin="normal" variant="outlined" />
+        <TextField
+          defaultValue={phoneNumber}
+          type="number"
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => { handlePhoneNumberChange(event.target.value) }} />
+
         <p className="form-titles">Description</p>
-        <TextField multiline rows="3" margin="normal" variant="filled" />
-        <Button variant="contained" color="primary" className="setButton">
+        <TextField
+          defaultValue={description}
+          multiline rows="3"
+          margin="normal"
+          variant="filled"
+          onChange={(event) => { handleDescriptionChange(event.target.value) }} />
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {onClickSetAppointment()}}
+          className="setButton">
           Set Appointment
         </Button>
       </div>
