@@ -14,7 +14,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-
+import helpers from './create-appointment-helper';
 
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -64,13 +64,17 @@ export default function CreateAppointment() {
       var json = 
       {
         selectedDate : dateLong,
-        name : name,
-        gender : gender,
-        phoneNumber : phoneNumber,
-        age : age,
-        type : typeOfTreatment,
+        patient_name : name,
+        patient_gender : gender,
+        hour : "12:00-13:00",
+        doctor : "213", // id // doktor çekilecek
+        patient_phone : phoneNumber,
+        patient_age : age,
+        type : 1, // id konulacak
         description : description
       }
+
+      helpers.createAppointment(json);
     }
     else
     {
@@ -89,7 +93,7 @@ export default function CreateAppointment() {
             label="Date picker dialog"
             format="MM/dd/yyyy"
             value={selectedDate}
-            onChange={(date) => {handleDateChange(date)}
+            onChange={(date) => {handleDateChange(date)}}
             KeyboardButtonProps={{
               "aria-label": "change date",
             }}
