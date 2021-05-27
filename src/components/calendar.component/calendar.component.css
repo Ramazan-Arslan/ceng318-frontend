@@ -1,4 +1,4 @@
-.calendarpage {
+.calendarpage { 
   position: fixed;
   top: 7%;
   width: 100%;
@@ -12,7 +12,7 @@
   padding: 10px;
 }
 .rbc-event,
-.rbc-day-slot .rbc-background-event {
+.rbc-day-slot, .rbc-background-event {
   font-size: 15px;
 }
 
