@@ -31,8 +31,10 @@
   padding: 15px;
   position: relative;
 }
-.MuiButton-contained {
+
+.logout-button {
   margin-right: 20px !important;
   background-color: #3e64ff !important;
   color: white !important;
+  text-transform: uppercase !important;
 }

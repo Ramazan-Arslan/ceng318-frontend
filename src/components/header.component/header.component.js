@@ -1,5 +1,5 @@
 import React from 'react'
-import Calendar from '../calendar.component/calendar.component'
+import CalendarPage from '../calendar.component/calendar.component'
 import './header.component.css'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
@@ -10,7 +10,7 @@ const routes = [
     key: 1,
     name: 'Calendar',
     path: '/calendar',
-    component: Calendar,
+    component: CalendarPage,
   },
   {
     key: 2,
@@ -48,7 +48,9 @@ export default function Header() {
       </div>
       <div className='user-info'>
         <p className='user-name-surname'>AMcık Furkan</p>
-        <Button variant='contained'>Log out</Button>
+        <Button className='logout-button' variant='contained'>
+          Log out
+        </Button>
       </div>
     </div>
   )
