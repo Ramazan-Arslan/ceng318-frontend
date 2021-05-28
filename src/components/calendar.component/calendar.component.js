@@ -11,7 +11,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
-
+import 'date-fns'
+import Grid from '@material-ui/core/Grid'
+import DateFnsUtils from '@date-io/date-fns'
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers'
 const localizer = momentLocalizer(moment)
 
 let allViews = Object.keys(Views).map((k) => Views[k])
@@ -38,9 +45,34 @@ export default function CalendarPage(props) {
   const [showTreatmentType, setShowTreatmentType] = useState(true)
   const [patient, setPatient] = useState('')
   const [modalIsOpen, setOpenModal] = useState(false)
+  const [fullName, setFullName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [age, setAge] = useState('')
+  const [typeOfTreatment, setTypeOfTreatment] = useState('')
+  const [description, setDescription] = useState('')
+  const [selectedDateBegin, setSelectedDateBegin] = React.useState(new Date())
+  const [selectedDateEnd, setSelectedDateEnd] = React.useState(new Date())
+
+  const handleDateChange = (date) => {
+    setSelectedDateBegin(date)
+  }
+
+  const handleDateChange2 = (date) => {
+    setSelectedDateEnd(date)
+  }
 
   const onEventClick = (event) => {
-    alert(event.id + ' ' + event.title + ' ' + event.start + ' ' + event.end) //Shows the event details provided while booking
+    /*alert(event.id + ' ' + event.title + ' ' + event.start + ' ' + event.end) //Shows the event details provided while booking*/
+    setFullName('Bekir Yörük')
+    setPhoneNumber('555 555 55 55')
+    setAge('29')
+    setTypeOfTreatment(event.title)
+    setDescription('description of the treatment')
+    setOpenModal(true)
+  }
+
+  const handleClose = () => {
+    setOpenModal(false)
   }
 
   const [state, setState] = React.useState({
@@ -71,7 +103,36 @@ export default function CalendarPage(props) {
             value={patient}
             onChange={(event) => setPatient(event.target.value)}
           />
-          <TextField id='standard-basic' label='Standard' />
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify='space-around'>
+              <KeyboardDatePicker
+                disableToolbar
+                variant='inline'
+                format='MM/dd/yyyy'
+                margin='normal'
+                id='date-picker-inline'
+                label='Begin'
+                value={selectedDateBegin}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+              <KeyboardDatePicker
+                disableToolbar
+                variant='inline'
+                format='MM/dd/yyyy'
+                margin='normal'
+                id='date-picker-inline'
+                label='End'
+                value={selectedDateEnd}
+                onChange={handleDateChange2}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
         </form>
         <div className='choose-dentist'>
           <Button
@@ -198,57 +259,57 @@ export default function CalendarPage(props) {
           startAccessor='start'
           endAccessor='end'
           style={{ height: 550, width: 1200 }}
-
         />
+        <p className='total-gain'>Total Gain: 2000 TL</p>
       </div>
 
       <Modal
-      className="modal"
-      open={!modalIsOpen} //  open={!modalIsOpen}  yapılırsa modal açılır. burayı state'e göre ayarlayacaz.
-      disablePortal
-      disableEnforceFocus
-      disableAutoFocus
-
-    >
-      <div className="modal-content">
-        <h5>Patient Detail</h5>
-        <p className="modal-title">Full Name</p>
-        <TextField
-          defaultValue={"Patient Name"}
-          margin="normal"
-          variant="outlined"
-          disabled
-      />
-        <p className="modal-title">Phone Number</p>
-        <TextField
-          defaultValue={"0543 608 3152"}
-          margin="normal"
-          variant="outlined"
-          disabled
-      />
-       <p className="modal-title">Age</p>
-        <TextField
-          defaultValue={"22"}
-          margin="normal"
-          variant="outlined"
-          disabled
-      />
-       <p className="modal-title">Type of Treatment</p>
-        <TextField
-          defaultValue={"Dental Care"}
-          margin="normal"
-          variant="outlined"
-          disabled
-      />
-        <p className="modal-title">Description</p>
-        <TextField
-          defaultValue={"Description"}
-          margin="normal"
-          variant="outlined"
-          disabled
-      />
-      </div>
-    </Modal>
+        className='modal'
+        open={modalIsOpen}
+        onClose={handleClose}
+        disablePortal
+        disableEnforceFocus
+        disableAutoFocus
+      >
+        <div className='modal-content'>
+          <h5>Patient Detail</h5>
+          <p className='modal-title'>Full Name</p>
+          <TextField
+            defaultValue={fullName}
+            margin='normal'
+            variant='outlined'
+            disabled
+          />
+          <p className='modal-title'>Phone Number</p>
+          <TextField
+            defaultValue={phoneNumber}
+            margin='normal'
+            variant='outlined'
+            disabled
+          />
+          <p className='modal-title'>Age</p>
+          <TextField
+            defaultValue={age}
+            margin='normal'
+            variant='outlined'
+            disabled
+          />
+          <p className='modal-title'>Type of Treatment</p>
+          <TextField
+            defaultValue={typeOfTreatment}
+            margin='normal'
+            variant='outlined'
+            disabled
+          />
+          <p className='modal-title'>Description</p>
+          <TextField
+            defaultValue={description}
+            margin='normal'
+            variant='outlined'
+            disabled
+          />
+        </div>
+      </Modal>
     </div>
   )
 }
