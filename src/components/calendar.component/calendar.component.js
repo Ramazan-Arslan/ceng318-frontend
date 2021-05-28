@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
+import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import './calendar.component.css'
 import style from 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -11,11 +11,11 @@ import Modal from '@material-ui/core/Modal'
 import 'date-fns'
 import Grid from '@material-ui/core/Grid'
 import DateFnsUtils from '@date-io/date-fns'
-import {  MuiPickersUtilsProvider,  KeyboardTimePicker,  KeyboardDatePicker,} from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, KeyboardDatePicker, } from '@material-ui/pickers'
 import helpers from './calendar-component-helper'
 
 const localizer = momentLocalizer(moment)
-let allViews = Object.keys(Views).map((k) => Views[k])
+
 
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
@@ -49,10 +49,10 @@ export default function CalendarPage(props) {
   const [selectedDateBegin, setSelectedDateBegin] = useState(null)
   const [selectedDateEnd, setSelectedDateEnd] = useState(null)
 
- 
+
 
   useEffect(async () => {
-    var events = await helpers.loadItems("", "", "",0,0);
+    var events = await helpers.loadItems("", "", "", 0, 0);
     setAppointments(events);
   }, []);
 
@@ -100,11 +100,16 @@ export default function CalendarPage(props) {
 
     var selectedTreatmentsString = "";
     selectedTreatments.map(treatment => { (selectedTreatmentsString = selectedTreatmentsString + treatment.name + "-") })
-    var startlong =  Boolean(selectedDateBegin)  ? selectedDateBegin.getTime() : 0;
-    var endlong =  Boolean(selectedDateEnd)  ? selectedDateEnd.getTime() : 0;
+    var startlong = Boolean(selectedDateBegin) ? selectedDateBegin.getTime() : 0;
+    var endlong = Boolean(selectedDateEnd) ? selectedDateEnd.getTime() : 0;
     var events = await helpers.loadItems(filterPatient, selectedDentistsString, selectedTreatmentsString, startlong, endlong);
     setAppointments(events);
   }
+
+  async function removeAppointment(event) {
+    helpers.removeAppointment(event.id);
+  }
+
 
 
 
@@ -124,40 +129,40 @@ export default function CalendarPage(props) {
         </form>
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid container justify='space-around'>
-              <KeyboardDatePicker
-                disableToolbar
-                variant='inline'
-                format='MM/dd/yyyy'
-                margin='normal'
-                id='date-picker-inline'
-                label='Begin'
-                value={selectedDateBegin}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-              <KeyboardDatePicker
-                disableToolbar
-                variant='inline'
-                format='MM/dd/yyyy'
-                margin='normal'
-                id='date-picker-inline'
-                label='End'
-                value={selectedDateEnd}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-            </Grid>
-          </MuiPickersUtilsProvider>
+          <Grid container justify='space-around'>
+            <KeyboardDatePicker
+              disableToolbar
+              variant='inline'
+              format='MM/dd/yyyy'
+              margin='normal'
+              id='date-picker-inline'
+              label='Begin'
+              value={selectedDateBegin}
+              onChange={handleStartDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+            <KeyboardDatePicker
+              disableToolbar
+              variant='inline'
+              format='MM/dd/yyyy'
+              margin='normal'
+              id='date-picker-inline'
+              label='End'
+              value={selectedDateEnd}
+              onChange={handleEndDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </Grid>
+        </MuiPickersUtilsProvider>
 
 
         <div className='choose-dentist'>
           <Multiselect
-            options={[{ name: 'Doktor1', id: 1 }, { name: 'Doktor2', id: 2 }, { name: 'Doktor3', id: 3 }]} // Options to display in the dropdown
+            options={[{ name: 'John Doe', id: 1 }, { name: 'Angela Merkel', id: 2 }, { name: 'Sergen Yalçın', id: 3 }]} // Options to display in the dropdown
             selectedValues={selectedDentists} // Preselected value to persist in dropdown
             onSelect={onSelectDentistFunction} // Function will trigger on select event
             onRemove={onRemoveDentistFunction} // Function will trigger on remove event
@@ -234,7 +239,7 @@ export default function CalendarPage(props) {
           />
           <p className="modal-title">Type of Treatment</p>
           <TextField
-            defaultValue={event.type}
+            defaultValue={event.type.type}
             margin="normal"
             variant="outlined"
             disabled
@@ -242,7 +247,7 @@ export default function CalendarPage(props) {
 
           <p className="modal-title">Doctor</p>
           <TextField
-            defaultValue={event.doctor}
+            defaultValue={event.doctor.full_name}
             margin="normal"
             variant="outlined"
             disabled
@@ -262,6 +267,10 @@ export default function CalendarPage(props) {
             variant="outlined"
             disabled
           />
+
+          <Button className='apply-button' onClick={() => removeAppointment(event)} variant='contained'>
+            Remove
+        </Button>
         </div>
       </Modal>}
 
