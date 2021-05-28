@@ -10,6 +10,7 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Button from '@material-ui/core/Button'
+import Modal from '@material-ui/core/Modal'
 
 const localizer = momentLocalizer(moment)
 
@@ -36,6 +37,7 @@ export default function CalendarPage(props) {
   const [showDentist, setShowDentist] = useState(true)
   const [showTreatmentType, setShowTreatmentType] = useState(true)
   const [patient, setPatient] = useState('')
+  const [modalIsOpen, setOpenModal] = useState(false)
 
   const onEventClick = (event) => {
     alert(event.id + ' ' + event.title + ' ' + event.start + ' ' + event.end) //Shows the event details provided while booking
@@ -196,8 +198,57 @@ export default function CalendarPage(props) {
           startAccessor='start'
           endAccessor='end'
           style={{ height: 550, width: 1200 }}
+
         />
       </div>
+
+      <Modal
+      className="modal"
+      open={!modalIsOpen} //  open={!modalIsOpen}  yapılırsa modal açılır. burayı state'e göre ayarlayacaz.
+      disablePortal
+      disableEnforceFocus
+      disableAutoFocus
+
+    >
+      <div className="modal-content">
+        <h5>Patient Detail</h5>
+        <p className="modal-title">Full Name</p>
+        <TextField
+          defaultValue={"Patient Name"}
+          margin="normal"
+          variant="outlined"
+          disabled
+      />
+        <p className="modal-title">Phone Number</p>
+        <TextField
+          defaultValue={"0543 608 3152"}
+          margin="normal"
+          variant="outlined"
+          disabled
+      />
+       <p className="modal-title">Age</p>
+        <TextField
+          defaultValue={"22"}
+          margin="normal"
+          variant="outlined"
+          disabled
+      />
+       <p className="modal-title">Type of Treatment</p>
+        <TextField
+          defaultValue={"Dental Care"}
+          margin="normal"
+          variant="outlined"
+          disabled
+      />
+        <p className="modal-title">Description</p>
+        <TextField
+          defaultValue={"Description"}
+          margin="normal"
+          variant="outlined"
+          disabled
+      />
+      </div>
+    </Modal>
     </div>
   )
 }
