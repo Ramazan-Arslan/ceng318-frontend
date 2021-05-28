@@ -1,26 +1,20 @@
-import events from '../../event'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import './calendar.component.css'
 import style from 'react-big-calendar/lib/css/react-big-calendar.css'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
+import { Multiselect } from 'multiselect-react-dropdown'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import 'date-fns'
 import Grid from '@material-ui/core/Grid'
 import DateFnsUtils from '@date-io/date-fns'
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers'
-const localizer = momentLocalizer(moment)
+import {  MuiPickersUtilsProvider,  KeyboardTimePicker,  KeyboardDatePicker,} from '@material-ui/pickers'
+import helpers from './calendar-component-helper'
 
+const localizer = momentLocalizer(moment)
 let allViews = Object.keys(Views).map((k) => Views[k])
 
 const ColoredDateCellWrapper = ({ children }) =>
@@ -39,71 +33,97 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+
+
+
+
+
 export default function CalendarPage(props) {
   const classes = useStyles()
-  const [showDentist, setShowDentist] = useState(true)
-  const [showTreatmentType, setShowTreatmentType] = useState(true)
-  const [patient, setPatient] = useState('')
-  const [modalIsOpen, setOpenModal] = useState(false)
-  const [fullName, setFullName] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [age, setAge] = useState('')
-  const [typeOfTreatment, setTypeOfTreatment] = useState('')
-  const [description, setDescription] = useState('')
-  const [selectedDateBegin, setSelectedDateBegin] = React.useState(new Date())
-  const [selectedDateEnd, setSelectedDateEnd] = React.useState(new Date())
+  const [filterPatient, setFilterPatient] = useState("")
+  const [appointments, setAppointments] = useState([])
+  const [selectedDentists, setSelectedDentists] = useState([]);
+  const [selectedTreatments, setSelectedTreatments] = useState([]);
+  const [modalIsOpen, setOpenModal] = useState(false);
+  const [event, setSelectedEvent] = useState(null);
+  const [selectedDateBegin, setSelectedDateBegin] = useState(null)
+  const [selectedDateEnd, setSelectedDateEnd] = useState(null)
 
-  const handleDateChange = (date) => {
+ 
+
+  useEffect(async () => {
+    var events = await helpers.loadItems("", "", "",0,0);
+    setAppointments(events);
+  }, []);
+
+
+
+  const onEventClick = (event) => {
+    setSelectedEvent(event);
+    setOpenModal(true);
+  }
+
+  const handleStartDateChange = (date) => {
     setSelectedDateBegin(date)
   }
 
-  const handleDateChange2 = (date) => {
+  const handleEndDateChange = (date) => {
     setSelectedDateEnd(date)
   }
-
-  const onEventClick = (event) => {
-    /*alert(event.id + ' ' + event.title + ' ' + event.start + ' ' + event.end) //Shows the event details provided while booking*/
-    setFullName('Bekir Yörük')
-    setPhoneNumber('555 555 55 55')
-    setAge('29')
-    setTypeOfTreatment(event.title)
-    setDescription('description of the treatment')
-    setOpenModal(true)
-  }
-
   const handleClose = () => {
     setOpenModal(false)
   }
 
-  const [state, setState] = React.useState({
-    dentist1: true,
-    dentist2: true,
-    dentist3: true,
-    type1: true,
-    type2: true,
-    type3: true,
-    type4: true,
-  })
 
-  const showPopup = () => {
-    alert('Message is received')
+  function onSelectDentistFunction(selectedList, selectedItem) {
+    selectedDentists.push(selectedItem);
   }
 
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked })
+  function onRemoveDentistFunction(selectedList, removedItem) {
+    const arr = selectedDentists.filter(item => (item["name"] !== removedItem["name"]));
+    setSelectedDentists(arr)
   }
+
+
+  function onSelectTreatmentFunction(selectedList, selectedItem) {
+    selectedTreatments.push(selectedItem);
+  }
+
+  function onRemoveTreatmentFunction(selectedList, removedItem) {
+    const arr = selectedTreatments.filter(item => (item["name"] !== removedItem["name"]));
+    setSelectedTreatments(arr)
+  }
+
+  async function filterResult() {
+    var selectedDentistsString = "";
+    selectedDentists.map(dentist => { (selectedDentistsString = selectedDentistsString + dentist.name + "-") })
+
+    var selectedTreatmentsString = "";
+    selectedTreatments.map(treatment => { (selectedTreatmentsString = selectedTreatmentsString + treatment.name + "-") })
+    var startlong =  Boolean(selectedDateBegin)  ? selectedDateBegin.getTime() : 0;
+    var endlong =  Boolean(selectedDateEnd)  ? selectedDateEnd.getTime() : 0;
+    var events = await helpers.loadItems(filterPatient, selectedDentistsString, selectedTreatmentsString, startlong, endlong);
+    setAppointments(events);
+  }
+
+
+
+
 
   return (
     <div className='calendarpage'>
       <div className='filter-calendar'>
+
         <form className={classes.root} noValidate autoComplete='off'>
           <TextField
             id='standard-basic'
             label='Enter a patient name'
-            value={patient}
-            onChange={(event) => setPatient(event.target.value)}
+            value={filterPatient}
+            onChange={(event) => setFilterPatient(event.target.value)}
           />
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        </form>
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify='space-around'>
               <KeyboardDatePicker
                 disableToolbar
@@ -113,7 +133,7 @@ export default function CalendarPage(props) {
                 id='date-picker-inline'
                 label='Begin'
                 value={selectedDateBegin}
-                onChange={handleDateChange}
+                onChange={handleStartDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -126,128 +146,46 @@ export default function CalendarPage(props) {
                 id='date-picker-inline'
                 label='End'
                 value={selectedDateEnd}
-                onChange={handleDateChange2}
+                onChange={handleEndDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
               />
             </Grid>
           </MuiPickersUtilsProvider>
-        </form>
+
+
         <div className='choose-dentist'>
-          <Button
-            className='choose-dentist-button'
-            variant='contained'
-            onClick={() => setShowDentist(!showDentist)}
-          >
-            Choose a Dentist
-          </Button>
-          <div className='filter-dentist-list'>
-            {showDentist && (
-              <FormGroup row>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={state.dentist1}
-                      onChange={handleChange}
-                      name='dentist1'
-                      color='primary'
-                    />
-                  }
-                  label='Dentist 1'
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={state.dentist2}
-                      onChange={handleChange}
-                      name='dentist2'
-                      color='primary'
-                    />
-                  }
-                  label='Dentis 2'
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={state.dentist3}
-                      onChange={handleChange}
-                      name='dentist3'
-                      color='primary'
-                    />
-                  }
-                  label='Dentist 3'
-                />
-              </FormGroup>
-            )}
-          </div>
+          <Multiselect
+            options={[{ name: 'Doktor1', id: 1 }, { name: 'Doktor2', id: 2 }, { name: 'Doktor3', id: 3 }]} // Options to display in the dropdown
+            selectedValues={selectedDentists} // Preselected value to persist in dropdown
+            onSelect={onSelectDentistFunction} // Function will trigger on select event
+            onRemove={onRemoveDentistFunction} // Function will trigger on remove event
+            displayValue="name" // Property name to display in the dropdown options
+          />
         </div>
+
         <div>
-          <Button
-            variant='contained'
-            onClick={() => setShowTreatmentType(!showTreatmentType)}
-            className='choose-treatment-type-button'
-          >
-            Treatment Type
-          </Button>
-          {showTreatmentType && (
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state.type1}
-                    onChange={handleChange}
-                    name='type1'
-                    color='primary'
-                  />
-                }
-                label='type1'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state.type2}
-                    onChange={handleChange}
-                    name='type2'
-                    color='primary'
-                  />
-                }
-                label='type2'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state.type3}
-                    onChange={handleChange}
-                    name='type3'
-                    color='primary'
-                  />
-                }
-                label='type3'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state.type4}
-                    onChange={handleChange}
-                    name='type4'
-                    color='primary'
-                  />
-                }
-                label='type4'
-              />
-            </FormGroup>
-          )}
+
+          <Multiselect
+            options={[{ name: 'Kanal tedavisi', id: 1 }, { name: 'Diş beyazlatma', id: 2 }, { name: 'Diş bakımı', id: 3 }]} // Options to display in the dropdown
+            selectedValues={selectedTreatments} // Preselected value to persist in dropdown
+            onSelect={onSelectTreatmentFunction} // Function will trigger on select event
+            onRemove={onRemoveTreatmentFunction} // Function will trigger on remove event
+            displayValue="name" // Property name to display in the dropdown options
+          />
         </div>
-        <Button className='apply-button' variant='contained'>
+        <Button className='apply-button' onClick={() => filterResult()} variant='contained'>
           APPLY
         </Button>
       </div>
 
+
+
       <div className='calendar-component'>
         <Calendar
           localizer={localizer}
-          events={events}
+          events={Object.values(appointments)}
           defaultView={'month'}
           step={60}
           style={style}
@@ -260,56 +198,73 @@ export default function CalendarPage(props) {
           endAccessor='end'
           style={{ height: 550, width: 1200 }}
         />
-        <p className='total-gain'>Total Gain: 2000 TL</p>
       </div>
 
-      <Modal
-        className='modal'
+      { Boolean(event) && <Modal
+        className="modal"
         open={modalIsOpen}
         onClose={handleClose}
         disablePortal
         disableEnforceFocus
         disableAutoFocus
+
       >
-        <div className='modal-content'>
+        <div className="modal-content">
           <h5>Patient Detail</h5>
-          <p className='modal-title'>Full Name</p>
+          <p className="modal-title">Full Name</p>
           <TextField
-            defaultValue={fullName}
-            margin='normal'
-            variant='outlined'
+            defaultValue={event.patient_name}
+            margin="normal"
+            variant="outlined"
             disabled
           />
-          <p className='modal-title'>Phone Number</p>
+          <p className="modal-title">Phone Number</p>
           <TextField
-            defaultValue={phoneNumber}
-            margin='normal'
-            variant='outlined'
+            defaultValue={event.patient_phone}
+            margin="normal"
+            variant="outlined"
             disabled
           />
-          <p className='modal-title'>Age</p>
+          <p className="modal-title">Age</p>
           <TextField
-            defaultValue={age}
-            margin='normal'
-            variant='outlined'
+            defaultValue={event.patient_age}
+            margin="normal"
+            variant="outlined"
             disabled
           />
-          <p className='modal-title'>Type of Treatment</p>
+          <p className="modal-title">Type of Treatment</p>
           <TextField
-            defaultValue={typeOfTreatment}
-            margin='normal'
-            variant='outlined'
+            defaultValue={event.type}
+            margin="normal"
+            variant="outlined"
             disabled
           />
-          <p className='modal-title'>Description</p>
+
+          <p className="modal-title">Doctor</p>
           <TextField
-            defaultValue={description}
-            margin='normal'
-            variant='outlined'
+            defaultValue={event.doctor}
+            margin="normal"
+            variant="outlined"
+            disabled
+          />
+
+          <p className="modal-title">Hour</p>
+          <TextField
+            defaultValue={event.hour}
+            margin="normal"
+            variant="outlined"
+            disabled
+          />
+          <p className="modal-title">Description</p>
+          <TextField
+            defaultValue={event.description}
+            margin="normal"
+            variant="outlined"
             disabled
           />
         </div>
-      </Modal>
+      </Modal>}
+
     </div>
   )
 }
