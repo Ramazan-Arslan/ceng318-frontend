@@ -12,7 +12,7 @@ const helpers = {
     loadItems: async function (patient_name, selectedDentists, selectedTreatments, startLong, endLong) {
 
         var jsonArray = await this.getAppointments();
-
+        console.log(jsonArray)
         var newItems = [];
 
         jsonArray.map(e => {
@@ -53,7 +53,6 @@ const helpers = {
             }
 
         })
-
         return newItems;
 
 
@@ -61,19 +60,19 @@ const helpers = {
 
     getStartDate: function (long, hour) {
         var startArray = hour.split("-")[0];
-        var startHour = startArray.split(":")[0];
-        var startMinute = startArray.split(":")[1];
+        var startHour = startArray.split(".")[0];
+        var startMinute = startArray.split(".")[1];
 
         var startingDate = new Date(long);
         startingDate.setHours(startHour, startMinute, 0, 0);
-
+        
         return startingDate;
     },
 
     getEndDate: function (long, hour) {
         var endArray = hour.split("-")[1];
-        var endHour = endArray.split(":")[0];
-        var endMinute = endArray.split(":")[1];
+        var endHour = endArray.split(".")[0];
+        var endMinute = endArray.split(".")[1];
 
         var endingDate = new Date(long);
         endingDate.setHours(endHour, endMinute, 0, 0);

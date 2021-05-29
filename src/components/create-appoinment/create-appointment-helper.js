@@ -11,6 +11,10 @@ const helpers = {
             window.history.pushState(null, "Dentist Appointment App", "/calendar")
             window.location.reload(true);
         }
+        else
+        {
+            console.log("asd")
+        }
     }
 };
 
