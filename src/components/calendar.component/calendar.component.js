@@ -369,31 +369,32 @@ export default function CalendarPage(props) {
 
 
 
-      <div className='calendar-component'>
-        <Calendar
-          localizer={localizer}
-          events={Object.values(appointments)}
-          defaultView={'month'}
-          step={60}
 
-          style={style}
-          timeslots={1}
-          showMultiDayTimes
-          onSelectEvent={(event) => onEventClick(event)}
-          components={{
-            timeSlotWrapper: ColoredDateCellWrapper,
-          }}
-          startAccessor='start'
-          endAccessor='end'
-          style={{ height: 550, width: 1200 }}
-          min={
-            new Date(
-              nowDate.getFullYear(),
-              nowDate.getMonth(),
-              nowDate.getDate(),
-              9
-            )
-          }
+        <div className='calendar-component'>
+          <Calendar
+            localizer={localizer}
+            events={Object.values(appointments)}
+            defaultView={'month'}
+            step={60}
+
+            style={style}
+            timeslots={1}
+            showMultiDayTimes
+            onSelectEvent={(event) => onEventClick(event)}
+            components={{
+              timeSlotWrapper: ColoredDateCellWrapper,
+            }}
+            startAccessor='start'
+            endAccessor='end'
+            style={{ height: 550, width: 1150 }}
+            min={
+              new Date(
+                nowDate.getFullYear(),
+                nowDate.getMonth(),
+                nowDate.getDate(),
+                9
+              )
+            }
 
           max={
             new Date(

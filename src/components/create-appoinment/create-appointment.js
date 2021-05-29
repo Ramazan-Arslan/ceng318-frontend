@@ -16,7 +16,9 @@ import getDentistId from '../../helperFunctions/getDentistId';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import calendarHelpers from '../calendar.component/calendar-component-helper';
-import { TramRounded } from '@material-ui/icons';
+
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -38,6 +40,12 @@ export default function CreateAppointment() {
     setEvents(events);
   }, []);
 
+  const [alignment, setAlignment] = React.useState('left');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
 
   const handleDateChange = (date) => {
     date.setHours(0,0,0,0);
@@ -47,7 +55,7 @@ export default function CreateAppointment() {
 
   const handleHourChange = (hour) => {
     setSelectedHour(hour);
-    setSelected(!isSelected);
+    console.log(selectedHour);
 
   };
 
@@ -125,7 +133,7 @@ export default function CreateAppointment() {
     if(closedHours.includes(hour))
     {
       return(
-        <Button variant="outlined" color="secondary" disabled={true} >{hour}</Button>
+        <Button variant="outlined" color="secondary" disabled={true}  >{hour}</Button>
       )
     }
 
@@ -213,7 +221,7 @@ export default function CreateAppointment() {
             variant='contained'
             onClick={() => setHours()}
           >
-            Get Hours
+            GET HOURS
           </Button>
         {showHours && getHours()}
     
@@ -289,6 +297,7 @@ export default function CreateAppointment() {
         <Button
           variant="contained"
           color="primary"
+        
           onClick={() => {onClickSetAppointment()}}
           className="setButton">
           Set Appointment

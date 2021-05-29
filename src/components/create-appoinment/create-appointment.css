@@ -38,6 +38,12 @@
 .description-field {
   min-height: 100px !important;
 }
+.choose-dentist-button{
+  background-color: #3e64ff !important;
+color:white !important;
+height: 40px !important;
+margin-left:20px !important;
+}
 
 .MuiButton-containedPrimary {
   background-color: #3e64ff !important;
@@ -45,23 +51,38 @@
   padding: 15px 20px !important;
   border-radius: 20px !important;
   margin-top: 15px !important;
+  position: relative !important;
 }
 
-
-.MuiButton-containedSecondary {
+.MuiButton-outlinedSecondary.Mui-disabled {
   background-color: #be123c !important;
+  color:white !important;
 }
+.button-selected{
+  background-color: #3E64FF !important;
+  color:white !important;
+  border-color:#3E64FF !important;
+}
+.button-unselected{
+  color :#6B779A;
+}
+
+
 .MuiFormGroup-root {
   color: #222b45 !important;
   flex-direction: row !important;
+  
+}
+.MuiOutlinedInput-root {
+  width:350px !important;
 }
 .MuiOutlinedInput-input {
   background: rgba(107, 119, 154, 0.05) !important;
   border-radius: 10px !important;
-  width: 320px !important;
 }
 .MuiFilledInput-multiline {
   background: rgba(107, 119, 154, 0.05) !important;
+  width:350px !important;
 }
 .type-of-treatment{
   margin-top: 20px;
