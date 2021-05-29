@@ -132,7 +132,7 @@ export default function CreateAppointment() {
     else
     {
       return(
-        <Button  className={isSelected ? 'button-selected'  : 'button-unselected' } variant="outlined" color="primary"  onClick={ () => handleHourChange(hour)}  >{hour}</Button>
+        <Button  className={selectedHour===hour ? 'button-selected'  : 'button-unselected' } variant="outlined" color="primary" onClick={ () => handleHourChange(hour)}  >{hour}</Button>
       )
     }
     

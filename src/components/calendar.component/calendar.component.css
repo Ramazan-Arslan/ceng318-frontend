@@ -100,6 +100,7 @@ background-color: white !important;
 .button-wrapper {
   display: flex ;
   align-items: center ;
+  margin-top: 5%;
   justify-content: center ;
 }
 
@@ -141,6 +142,11 @@ h5 {
   background-color: #DC2626 !important;
 }
 
+.rbc-show-more{
+  color: red !important;
+}
+
+
 .makeStyles-root-1 > * {
   width: 25ch !important;
 }
@@ -154,3 +160,4 @@ h5 {
   font-size: 14px;
   font-weight: 600;
 }
+

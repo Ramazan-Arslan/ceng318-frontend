@@ -38,7 +38,7 @@ const helpers = {
                                             phone: e.doctor.phone
                                         },
                                         patient_name: e.patient_name,
-                                        patient_gender: e.gender,
+                                        patient_gender: e.patient_gender,
                                         patient_phone: e.patient_phone,
                                         patient_age: e.patient_age,
                                         type: {
@@ -91,6 +91,22 @@ const helpers = {
         if (isTrue) {
             alert("Removed")
             window.location.reload(true);
+        }
+        else {
+            alert("Error occured")
+        }
+    },
+
+    updateAppointment: async function (json) {
+        var path = "/api/v1/update/appointment";
+        const isTrue = await postRequest(path, json);
+
+        if (isTrue) {
+            alert("Updated")
+            window.location.reload(true);
+        }
+        else {
+            alert("Error occured")
         }
     }
 };
