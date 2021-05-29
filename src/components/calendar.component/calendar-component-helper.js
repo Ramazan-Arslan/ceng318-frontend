@@ -40,7 +40,7 @@ const helpers = {
                                     patient_phone: e.patient_phone,
                                     patient_age: e.patient_age,
                                     type: {
-                                        id: e.type,
+                                        id: e.type.id,
                                         type: e.type.type,
                                         price: e.type.price
                                     },

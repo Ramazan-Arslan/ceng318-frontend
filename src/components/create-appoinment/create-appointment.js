@@ -78,7 +78,7 @@ export default function CreateAppointment() {
       var json = 
       {
         date : dateLong,        
-        hour : "12:00-13:00",
+        hour : selectedHour,
         doctor : { id : dentistId },
         type : {id : treatmentId } ,
         patient_name : name,
