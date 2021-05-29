@@ -28,7 +28,7 @@ const helpers = {
                                 newItems.push(
                                     {
                                         id: e.id,
-                                        title: e.hour,
+                                        title: e.patient_name,
                                         start: start,
                                         end: end,
                                         hour: e.hour,
