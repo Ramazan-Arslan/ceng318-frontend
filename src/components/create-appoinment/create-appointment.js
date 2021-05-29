@@ -31,6 +31,7 @@ export default function CreateAppointment() {
   const [events, setEvents] = useState([]);
   const [closedHours,setClosedHours] = useState("");
   const [showHours, setShowHours] = useState(false);
+  const [isSelected, setSelected] = useState(false);
   
   useEffect(async () => {
     var events = await calendarHelpers.loadItems("", "", "", 0, 0);
@@ -46,6 +47,8 @@ export default function CreateAppointment() {
 
   const handleHourChange = (hour) => {
     setSelectedHour(hour);
+    setSelected(!isSelected);
+
   };
 
   const handleGenderChange = (event) => {
@@ -129,7 +132,7 @@ export default function CreateAppointment() {
     else
     {
       return(
-        <Button variant="outlined" color="primary"  onClick={ () => handleHourChange(hour)}>{hour}</Button>
+        <Button  className={isSelected ? 'button-selected'  : 'button-unselected' } variant="outlined" color="primary"  onClick={ () => handleHourChange(hour)}  >{hour}</Button>
       )
     }
     

@@ -345,21 +345,21 @@ export default function CalendarPage(props) {
               (event, start, end, isSelected) => {
                 let newStyle = {
                   backgroundColor: "purple",
-                  color: 'black',
                   borderRadius: "0px",
                   border: "none"
                 };
           
                 if (event.doctor.full_name == "Sergen Yalçın"){
-                  newStyle.backgroundColor = "#FFE4E6"
-                  console.log(event.doctor.full_name)
+                  newStyle.backgroundColor = "rgb(177 75 83)"
+     
   
                 }
                 else if (event.doctor.full_name == "John Doe"){
                   newStyle.backgroundColor = "#56CCF2"
-                  console.log(event.doctor.full_name)
+           
                 }else{
                   newStyle.backgroundColor = "#BB6BD9"
+           
                 }
           
                 return {
