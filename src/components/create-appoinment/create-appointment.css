@@ -8,7 +8,6 @@
   position: fixed;
   display: flex;
   justify-content: center;
-  overflow: scroll;
 }
 .create-appointment-left {
   width: 45%;
@@ -41,6 +40,8 @@
   border-radius: 20px !important;
   margin-top: 15px !important;
 }
+
+
 .MuiButton-containedSecondary {
   background-color: #be123c !important;
 }
@@ -52,6 +53,9 @@
   background: rgba(107, 119, 154, 0.05) !important;
   border-radius: 10px !important;
   width: 320px !important;
+}
+.MuiButton-outlinedPrimary:focus{
+  background-color: #ff0101 !important;
 }
 .MuiFilledInput-multiline {
   background: rgba(107, 119, 154, 0.05) !important;

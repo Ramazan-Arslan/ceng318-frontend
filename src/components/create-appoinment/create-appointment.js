@@ -15,6 +15,8 @@ import getTreatmentId from '../../helperFunctions/getTreatmentId';
 import getDentistId from '../../helperFunctions/getDentistId';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import calendarHelpers from '../calendar.component/calendar-component-helper';
+import { TramRounded } from '@material-ui/icons';
 
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -26,9 +28,20 @@ export default function CreateAppointment() {
   const [typeOfTreatment, setTypeOfTreatment] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [description, setDescription] = useState("");
+  const [events, setEvents] = useState([]);
+  const [closedHours,setClosedHours] = useState("");
+  const [showHours, setShowHours] = useState(false);
+  
+  useEffect(async () => {
+    var events = await calendarHelpers.loadItems("", "", "", 0, 0);
+    setEvents(events);
+  }, []);
+
 
   const handleDateChange = (date) => {
+    date.setHours(0,0,0,0);
     setSelectedDate(date);
+    setShowHours(false);
   };
 
   const handleHourChange = (hour) => {
@@ -61,7 +74,66 @@ export default function CreateAppointment() {
 
   const handleDentistChange = (dentist) => {
     setDentist(dentist);
+    setShowHours(false);
   };
+
+  function setHours()
+  {
+    setClosedHours("");
+    if(Boolean(selectedDate)&&Boolean(dentist))
+    {
+      events.map(e => {
+
+        var appointmentDate = new Date(e.date);
+        if(e.doctor.full_name === dentist 
+          && appointmentDate.getDate() === selectedDate.getDate() 
+          &&  appointmentDate.getMonth() === selectedDate.getMonth() 
+          && appointmentDate.getFullYear() === selectedDate.getFullYear())
+        {
+          setClosedHours(closedHours+e.hour);  
+        }
+      })
+      setShowHours(true);
+    }  
+  }
+
+  function getHours()
+  {
+
+    var hourArray = ["09.00-10.00","10.00-11.00","11.00-12.00","13.00-14.00","14.00-15.00","15.00-16.00","16.00-17.00"]
+    return(
+      <div className="avaible-time">
+      <p className="form-titles">Available Time</p>
+      
+        {getHourButton(hourArray[0])}
+        {getHourButton(hourArray[1])}
+        {getHourButton(hourArray[2])}
+        {getHourButton(hourArray[3])}
+        {getHourButton(hourArray[4])}
+        {getHourButton(hourArray[5])}
+        {getHourButton(hourArray[6])}
+      
+    </div>
+    )
+  }
+
+  function getHourButton(hour)
+  {
+    if(closedHours.includes(hour))
+    {
+      return(
+        <Button variant="outlined" color="secondary" disabled={true} >{hour}</Button>
+      )
+    }
+
+    else
+    {
+      return(
+        <Button variant="outlined" color="primary"  onClick={ () => handleHourChange(hour)}>{hour}</Button>
+      )
+    }
+    
+  }
 
 
   function onClickSetAppointment()
@@ -69,11 +141,16 @@ export default function CreateAppointment() {
     var treatmentId = getTreatmentId.getId(typeOfTreatment);
     var dentistId = getDentistId.getId(dentist);
 
-    var isInputOK = Boolean(selectedDate) && Boolean(name) && Boolean(age) && Boolean(gender) 
+    var isInputOK = Boolean(selectedDate) && Boolean(name) && Boolean(selectedHour) && Boolean(age) && Boolean(gender) 
     && Boolean(description) && (treatmentId !== -1) && Boolean(phoneNumber) && (dentistId !== -1);
 
     if (isInputOK)
     {
+      var hourArray = selectedHour.split("-")[0];
+      var hour = hourArray.split(".")[0];
+      var minute = hourArray.split(".")[1];
+      selectedDate.setHours(hour, minute, 0, 0);
+
       var dateLong = selectedDate.getTime();
       var json = 
       {
@@ -115,16 +192,28 @@ export default function CreateAppointment() {
           />
         </MuiPickersUtilsProvider>
 
-        <div className="avaible-time">
-          <p className="form-titles">Available Time</p>
-          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("09.00-10.00")}>09.00-10.00</Button>
-          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("10.00-11.00")}>10.00-11.00</Button>
-          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("11.00-12.00")}>11.00-12.00</Button>
-          <Button variant="contained" color="secondary" onClick={ () => handleHourChange("13.00-14.00")}>13.00-14.00</Button>
-          <Button variant="contained" color="secondary" onClick={ () => handleHourChange("14.00-15.00")}>14.00-15.00</Button>
-          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("15.00-16.00")}>15.00-16.00</Button>
-          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("16.00-17.00")}>16.00-17.00</Button>
-        </div>
+        <p className="form-titles">Dentist</p>
+        <Select
+        className="type-of-treatment"
+          value={dentist}
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => { handleDentistChange(event.target.value) }}
+        >
+          <MenuItem value={"John Doe"}>John Doe</MenuItem>
+          <MenuItem value={"Angela Merkel"}>Angela Merkel</MenuItem>
+          <MenuItem value={"Sergen Yalçın"}>Sergen Yalçın</MenuItem>
+        </Select>
+
+        <Button
+            className='choose-dentist-button'
+            variant='contained'
+            onClick={() => setHours()}
+          >
+            Get Hours
+          </Button>
+        {showHours && getHours()}
+    
 
         <p className="form-titles form-titles-header">Patient Details</p>
         <p className="form-titles">Full Name</p>
@@ -176,18 +265,7 @@ export default function CreateAppointment() {
           <MenuItem value={"Diş bakımı"}>Diş bakımı</MenuItem>
         </Select>
 
-        <p className="form-titles">Dentist</p>
-        <Select
-        className="type-of-treatment"
-          value={dentist}
-          margin="normal"
-          variant="outlined"
-          onChange={(event) => { handleDentistChange(event.target.value) }}
-        >
-          <MenuItem value={"John Doe"}>John Doe</MenuItem>
-          <MenuItem value={"Angela Merkel"}>Angela Merkel</MenuItem>
-          <MenuItem value={"Sergen Yalçın"}>Sergen Yalçın</MenuItem>
-        </Select>
+        
 
         <p className="form-titles">Phone Number</p>
         <TextField
