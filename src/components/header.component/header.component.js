@@ -53,7 +53,7 @@ export default function Header() {
         <Router>
           {routes.map((route) => (
             <p className='route'>
-              <Link style={linkStyle} to={route.path}>
+              <Link className='link-class' to={route.path}>
                 {route.name}
               </Link>
             </p>

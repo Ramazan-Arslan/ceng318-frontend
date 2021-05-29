@@ -267,10 +267,14 @@ export default function CalendarPage(props) {
             variant="outlined"
             disabled
           />
-
-          <Button className='apply-button' onClick={() => removeAppointment(event)} variant='contained'>
+          <p className="modal-title"></p>
+          <div className="button-wrapper">
+          <Button className='apply-button' 
+            onClick={() => removeAppointment(event)} 
+            variant='contained'>
             Remove
-        </Button>
+          </Button>
+          </div>
         </div>
       </Modal>}
 
