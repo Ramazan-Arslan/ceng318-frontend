@@ -19,7 +19,6 @@
 }
 
 .route {
-  color: blue !important;
   padding: 15px;
 }
 .user-info {
@@ -38,14 +37,4 @@
   background-color: #3e64ff !important;
   color: white !important;
   text-transform: uppercase !important;
-}
-
-.link-class {
-  color: black;
-  text-decoration: none;
-}
-
-.link-class:focus {
-  color: #2677a3;
-  font-weight: bold;
 }

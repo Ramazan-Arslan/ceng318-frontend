@@ -48,7 +48,7 @@ export default function CalendarPage(props) {
   const [event, setSelectedEvent] = useState(null);
   const [selectedDateBegin, setSelectedDateBegin] = useState(null)
   const [selectedDateEnd, setSelectedDateEnd] = useState(null)
-  const nowDate = new Date();
+
 
 
   useEffect(async () => {
@@ -173,11 +173,10 @@ export default function CalendarPage(props) {
             onSelect={onSelectDentistFunction} // Function will trigger on select event
             onRemove={onRemoveDentistFunction} // Function will trigger on remove event
             displayValue="name" // Property name to display in the dropdown options
-            placeholder="Choose a doctor"
           />
         </div>
 
-        <div className='choose-treatment'>
+        <div>
 
           <Multiselect
             options={[{ name: 'Kanal tedavisi', id: 1 }, { name: 'Diş beyazlatma', id: 2 }, { name: 'Diş bakımı', id: 3 }]} // Options to display in the dropdown
@@ -185,7 +184,6 @@ export default function CalendarPage(props) {
             onSelect={onSelectTreatmentFunction} // Function will trigger on select event
             onRemove={onRemoveTreatmentFunction} // Function will trigger on remove event
             displayValue="name" // Property name to display in the dropdown options
-            placeholder="Treatment Type"
           />
         </div>
         <Button className='apply-button' onClick={() => filterResult()} variant='contained'>
@@ -201,17 +199,8 @@ export default function CalendarPage(props) {
           events={Object.values(appointments)}
           defaultView={'month'}
           step={60}
-
-          style={style}
-          timeslots={1}
-          showMultiDayTimes
-          onSelectEvent={(event) => onEventClick(event)}
-          components={{
-            timeSlotWrapper: ColoredDateCellWrapper,
-          }}
-          startAccessor='start'
-          endAccessor='end'
-          style={{ height: 550, width: 1200 }}
+          style={style}          
+          timeslots={1} 
           min={
             new Date(
               nowDate.getFullYear(), 
@@ -229,6 +218,14 @@ export default function CalendarPage(props) {
               17
             )
           }
+          showMultiDayTimes
+          onSelectEvent={(event) => onEventClick(event)}
+          components={{
+            timeSlotWrapper: ColoredDateCellWrapper,
+          }}
+          startAccessor='start'
+          endAccessor='end'
+          style={{ height: 550, width: 1200 }}
         />
       </div>
 
@@ -294,14 +291,10 @@ export default function CalendarPage(props) {
             variant="outlined"
             disabled
           />
-          <p className="modal-title"></p>
-          <div className="button-wrapper">
-          <Button className='apply-button' 
-            onClick={() => removeAppointment(event)} 
-            variant='contained'>
+
+          <Button className='apply-button' onClick={() => removeAppointment(event)} variant='contained'>
             Remove
-          </Button>
-          </div>
+        </Button>
         </div>
       </Modal>}
 
