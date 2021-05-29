@@ -2,15 +2,19 @@ import postRequest from '../../server-connections/postRequest'
 
 const helpers = {
     createAppointment: async function (json) {
-        var path = "/api/v1/add/doctor";
-        
-        var jsonx = {
-            full_name:"Furkan Sahin2",
-            gain: 200,
-            phone: "1231231"
+        var path = "/api/v1/add/appointment";        
+        const isTrue = await postRequest(path, json);        
+
+        if(isTrue)
+        {
+            alert("Added")
+            window.history.pushState(null, "Dentist Appointment App", "/calendar")
+            window.location.reload(true);
         }
-        const obj = await postRequest(path, jsonx);
-        
+        else
+        {
+            console.log("asd")
+        }
     }
 };
 

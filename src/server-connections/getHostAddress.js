@@ -1,4 +1,4 @@
 const getHostAddress = () => {
-    return 'http://izmir4.parta.com.tr:8080';
+    return 'http://ec2-3-137-140-228.us-east-2.compute.amazonaws.com:8080';
 }
 export default getHostAddress;

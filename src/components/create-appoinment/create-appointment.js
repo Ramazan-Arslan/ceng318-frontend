@@ -18,6 +18,7 @@ import Select from '@material-ui/core/Select';
 
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedHour, setSelectedHour] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
@@ -28,6 +29,10 @@ export default function CreateAppointment() {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  const handleHourChange = (hour) => {
+    setSelectedHour(hour);
   };
 
   const handleGenderChange = (event) => {
@@ -63,22 +68,23 @@ export default function CreateAppointment() {
   {
     var treatmentId = getTreatmentId.getId(typeOfTreatment);
     var dentistId = getDentistId.getId(dentist);
-    var isInputOK = Boolean(selectedDate.getTime()) && Boolean(name) && Boolean(age) && Boolean(gender) 
-    && Boolean(description) && (treatmentId != -1) && Boolean(phoneNumber) && (dentistId != -1);
+
+    var isInputOK = Boolean(selectedDate) && Boolean(name) && Boolean(age) && Boolean(gender) 
+    && Boolean(description) && (treatmentId !== -1) && Boolean(phoneNumber) && (dentistId !== -1);
 
     if (isInputOK)
     {
       var dateLong = selectedDate.getTime();
       var json = 
       {
-        selectedDate : dateLong,
+        date : dateLong,        
+        hour : selectedHour,
+        doctor : { id : dentistId },
+        type : {id : treatmentId } ,
         patient_name : name,
         patient_gender : gender,
-        hour : "12:00-13:00",
-        doctor : dentistId,
         patient_phone : phoneNumber,
-        patient_age : age,
-        type : treatmentId,
+        patient_age : parseInt(age),        
         description : description
       }
 
@@ -99,6 +105,7 @@ export default function CreateAppointment() {
             margin="normal"
             id="date-picker-dialog"
             label="Date picker dialog"
+            minDate={new Date()}
             format="MM/dd/yyyy"
             value={selectedDate}
             onChange={(date) => {handleDateChange(date)}}
@@ -110,13 +117,13 @@ export default function CreateAppointment() {
 
         <div className="avaible-time">
           <p className="form-titles">Available Time</p>
-          <Button variant="outlined" color="primary">09.00-10.00 </Button>
-          <Button variant="outlined" color="primary">10.00-11.00</Button>
-          <Button variant="outlined" color="primary">11.00-12.00</Button>
-          <Button variant="contained" color="secondary">13.00-14.00</Button>
-          <Button variant="contained" color="secondary">14.00-15.00</Button>
-          <Button variant="outlined" color="primary">15.00-16.00</Button>
-          <Button variant="outlined" color="primary">16.00-17.00</Button>
+          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("09.00-10.00")}>09.00-10.00</Button>
+          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("10.00-11.00")}>10.00-11.00</Button>
+          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("11.00-12.00")}>11.00-12.00</Button>
+          <Button variant="contained" color="secondary" onClick={ () => handleHourChange("13.00-14.00")}>13.00-14.00</Button>
+          <Button variant="contained" color="secondary" onClick={ () => handleHourChange("14.00-15.00")}>14.00-15.00</Button>
+          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("15.00-16.00")}>15.00-16.00</Button>
+          <Button variant="outlined" color="primary" onClick={ () => handleHourChange("16.00-17.00")}>16.00-17.00</Button>
         </div>
 
         <p className="form-titles form-titles-header">Patient Details</p>
@@ -164,7 +171,7 @@ export default function CreateAppointment() {
           variant="outlined"
           onChange={(event) => { handleTypeOfTreatmentChange(event.target.value) }}
         >
-          <MenuItem value={"Kanal Tedavisi"}>Kanal tedavisi</MenuItem>
+          <MenuItem value={"Kanal tedavisi"}>Kanal tedavisi</MenuItem>
           <MenuItem value={"Diş beyazlatma"}>Diş beyazlatma</MenuItem>
           <MenuItem value={"Diş bakımı"}>Diş bakımı</MenuItem>
         </Select>
@@ -177,9 +184,9 @@ export default function CreateAppointment() {
           variant="outlined"
           onChange={(event) => { handleDentistChange(event.target.value) }}
         >
-          <MenuItem value={"Doktor1"}>Doktor1</MenuItem>
-          <MenuItem value={"Doktor2"}>Doktor2</MenuItem>
-          <MenuItem value={"Doktor3"}>Doktor3</MenuItem>
+          <MenuItem value={"John Doe"}>John Doe</MenuItem>
+          <MenuItem value={"Angela Merkel"}>Angela Merkel</MenuItem>
+          <MenuItem value={"Sergen Yalçın"}>Sergen Yalçın</MenuItem>
         </Select>
 
         <p className="form-titles">Phone Number</p>

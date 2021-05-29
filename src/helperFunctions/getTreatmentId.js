@@ -1,8 +1,8 @@
 const helpers = {
-    getId: function (type) {
+    getId: function (name) {
         var returnedId = -1;
 
-        switch (type) {
+        switch (name) {
             case "Kanal tedavisi":
                 returnedId = 1;
                 break;

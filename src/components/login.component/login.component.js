@@ -9,17 +9,25 @@ export default function Login() {
   const [userEmail, setEmail] = useState('')
   const [userPassword, setPassword] = useState('')
 
-  function login() {
+  async function login() {
     var json =
     {
       userData:
       {
         email: userEmail,
-       password: userPassword
+        password: userPassword
       }
-      
+
     }
-    helpers.authentication(json);
+    const obj = await helpers.authentication(json);
+    if(Boolean(obj.accessToken))
+    {
+      localStorage.setItem("userName",obj.userData.fullName);
+      localStorage.setItem("token",obj.accessToken);
+
+      window.history.pushState(null, "Dentist Appointment App", "/calendar")
+      window.location.reload(true);
+    }
   }
 
   return (
