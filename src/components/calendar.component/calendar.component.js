@@ -20,7 +20,7 @@ const nowDate = new Date();
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
     style: {
-      backgroundColor: 'lightblue',
+      backgroundColor: 'white',
     },
   })
 
