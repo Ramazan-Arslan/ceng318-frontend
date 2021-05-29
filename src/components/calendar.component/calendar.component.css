@@ -84,6 +84,7 @@
   width: auto !important; 
   text-align: start;
   display: flex;
+  overflow: scroll;
   align-items: center;
   justify-content: center ;
   overflow: scroll;
