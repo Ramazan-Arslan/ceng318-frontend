@@ -100,6 +100,7 @@ background-color: white !important;
 .button-wrapper {
   display: flex ;
   align-items: center ;
+  margin-top: 5%;
   justify-content: center ;
 }
 
@@ -141,6 +142,28 @@ h5 {
   color: #FFFFFF !important;
   background-color: #DC2626 !important;
 }
+
 .rbc-btn-group2 > button:last-child:not(:first-child) {
 display: none;
 }
+
+
+.rbc-show-more{
+  color: red !important;
+}
+
+
+.makeStyles-root-1 > * {
+  width: 25ch !important;
+}
+
+.percentage-dentist{
+  margin: 5px 20px;
+  width: 25ch !important;
+}
+.percentage-dentist-p{
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+}
+

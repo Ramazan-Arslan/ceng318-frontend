@@ -9,6 +9,12 @@
   display: flex;
   justify-content: center;
 }
+.button-selected{
+  background-color: yellow !important;
+}
+.button-unselected{
+  background-color: white !important;
+}
 .create-appointment-left {
   width: 45%;
 }
@@ -73,9 +79,6 @@ margin-left:20px !important;
 .MuiOutlinedInput-input {
   background: rgba(107, 119, 154, 0.05) !important;
   border-radius: 10px !important;
-}
-.MuiButton-outlinedPrimary:focus{
-  background-color: #ff0101 !important;
 }
 .MuiFilledInput-multiline {
   background: rgba(107, 119, 154, 0.05) !important;
