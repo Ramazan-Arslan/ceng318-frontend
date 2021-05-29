@@ -12,9 +12,8 @@ const helpers = {
     loadItems: async function (patient_name, selectedDentists, selectedTreatments, startLong, endLong) {
 
         var jsonArray = await this.getAppointments();
-
-
         var newItems = [];
+
         if (Boolean(jsonArray)) {
 
             jsonArray.map(e => {
@@ -31,6 +30,7 @@ const helpers = {
                                         title: e.patient_name,
                                         start: start,
                                         end: end,
+                                        date: e.date,
                                         hour: e.hour,
                                         doctor: {
                                             id: e.doctor.id,

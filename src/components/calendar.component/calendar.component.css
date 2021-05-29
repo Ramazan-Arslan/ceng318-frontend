@@ -92,14 +92,15 @@ background-color: white !important;
 }
 
 .apply-button {
-  padding-left: 50px !important;
-  padding-right: 50px !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-  margin-right: 20px !important;
   background-color: #3e64ff !important;
   color: white !important;
   text-transform: uppercase !important;
+}
+
+.button-wrapper {
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
 }
 
 .choose {
@@ -108,27 +109,34 @@ background-color: white !important;
   text-transform: none !important;
 }
 
-.modal{
+.modal {
   height: auto !important;
   width: auto !important; 
   text-align: start;
   display: flex;
+  overflow: scroll;
   align-items: center;
   justify-content: center ;
+  overflow: scroll;
 }
 
-.modal-content{
+.modal-content {
   color: #222b45;
   padding: 10px 25px !important;
   border-radius: 4px ;
   background-color: white !important;
 }
-h5{
+
+h5 {
   margin:15px 0px  ;
 }
 
 .modal-title{
   margin:0 !important;
   font-size: 16px;
- 
+}
+
+.rbc-toolbar button:active, .rbc-toolbar button.rbc-active {
+  color: #FFFFFF !important;
+  background-color: #DC2626 !important;
 }

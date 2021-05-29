@@ -15,7 +15,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker, } from '@material-ui/picke
 import helpers from './calendar-component-helper'
 
 const localizer = momentLocalizer(moment)
-
+const nowDate = new Date();
 
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
@@ -64,12 +64,17 @@ export default function CalendarPage(props) {
   }
 
   const handleStartDateChange = (date) => {
-    setSelectedDateBegin(date)
+    var startDate = new Date(date);
+    startDate.setHours(0,0,0,0);
+    setSelectedDateBegin(startDate)
   }
 
   const handleEndDateChange = (date) => {
-    setSelectedDateEnd(date)
+    var endDate = new Date(date);
+    endDate.setHours(23,59,0,0);
+    setSelectedDateEnd(endDate)
   }
+
   const handleClose = () => {
     setOpenModal(false)
   }
@@ -116,6 +121,7 @@ export default function CalendarPage(props) {
 
 
   return (
+ 
     <div className='calendarpage'>
       <div className='filter-calendar'>
 
@@ -195,6 +201,7 @@ export default function CalendarPage(props) {
           events={Object.values(appointments)}
           defaultView={'month'}
           step={60}
+
           style={style}
           timeslots={1}
           showMultiDayTimes
@@ -287,10 +294,14 @@ export default function CalendarPage(props) {
             variant="outlined"
             disabled
           />
-
-          <Button className='apply-button' onClick={() => removeAppointment(event)} variant='contained'>
+          <p className="modal-title"></p>
+          <div className="button-wrapper">
+          <Button className='apply-button' 
+            onClick={() => removeAppointment(event)} 
+            variant='contained'>
             Remove
-        </Button>
+          </Button>
+          </div>
         </div>
       </Modal>}
 
