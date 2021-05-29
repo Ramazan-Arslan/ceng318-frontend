@@ -4,7 +4,6 @@ import './header.component.css'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import CreateAppointment from '../create-appoinment/create-appointment'
-import Statictics from '../statictics.component/statictics-component'
 import { LocalDiningOutlined } from '@material-ui/icons'
 
 const routes = [
@@ -19,12 +18,6 @@ const routes = [
     name: 'Create Appointment',
     path: '/createAppointment',
     component: CreateAppointment,
-  },
-  {
-    key: 3,
-    name: 'Statictics',
-    path: '/statictics',
-    component: Statictics,
   },
 ]
 
@@ -60,7 +53,7 @@ export default function Header() {
         <Router>
           {routes.map((route) => (
             <p className='route'>
-              <Link style={linkStyle} to={route.path}>
+              <Link className='link-class' to={route.path}>
                 {route.name}
               </Link>
             </p>

@@ -13,9 +13,24 @@
 }
 .rbc-event,
 .rbc-day-slot, .rbc-background-event {
-  font-size: 15px;
-}
+  font-size: 16px;
+  border:0 !important;
+  max-height: 42px !important;
 
+}
+.rbc-ellipsis, .rbc-event-label, .rbc-row-segment .rbc-event-content, .rbc-show-more {
+  color:#BE123C !important;
+  font-weight: 900;
+}
+.rbc-time-slot {
+background-color: white !important;
+
+}
+.rbc-day-slot .rbc-event-content {
+  color: #EB5757 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
 .MuiFormGroup-root {
   flex-direction: column !important; /* is not working*/
 }
@@ -31,7 +46,7 @@
 }
 
 .makeStyles-root-1 > * {
-  width: 15ch !important;
+  width: 200px !important;
   margin: 8px;
 }
 
@@ -39,11 +54,25 @@
   max-width: 20%;
   align-items: center;
   margin-top: 30px;
+  color: black;
+  font-size: 15px;
 }
 .choose-dentist {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px !important;
+  width: 210px !important;
+  margin-left: 5px;
+}
+.MuiFormControl-marginNormal {
+  width: 210px !important;
+  margin-left: 5px !important;
+}
+.choose-treatment{
+  margin-bottom: 20px !important;
+  width: 210px !important;
+  margin-left: 5px;
 }
 .filter-dentist-list {
   display: flex;
@@ -62,14 +91,15 @@
 }
 
 .apply-button {
-  padding-left: 50px !important;
-  padding-right: 50px !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-  margin-right: 20px !important;
   background-color: #3e64ff !important;
   color: white !important;
   text-transform: uppercase !important;
+}
+
+.button-wrapper {
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
 }
 
 .choose {
@@ -78,7 +108,7 @@
   text-transform: none !important;
 }
 
-.modal{
+.modal {
   height: auto !important;
   width: auto !important; 
   text-align: start;
@@ -86,20 +116,26 @@
   overflow: scroll;
   align-items: center;
   justify-content: center ;
+  overflow: scroll;
 }
 
-.modal-content{
+.modal-content {
   color: #222b45;
   padding: 10px 25px !important;
   border-radius: 4px ;
   background-color: white !important;
 }
-h5{
+
+h5 {
   margin:15px 0px  ;
 }
 
 .modal-title{
   margin:0 !important;
   font-size: 16px;
- 
+}
+
+.rbc-toolbar button:active, .rbc-toolbar button.rbc-active {
+  color: #FFFFFF !important;
+  background-color: #DC2626 !important;
 }

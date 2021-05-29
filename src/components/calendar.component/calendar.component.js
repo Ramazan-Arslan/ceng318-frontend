@@ -41,6 +41,14 @@ const useStyles = makeStyles((theme) => ({
 export default function CalendarPage(props) {
   const classes = useStyles()
   const [filterPatient, setFilterPatient] = useState("")
+  const [gains, setGains] = useState({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
+  const [workLoadCounts, setWorkLoadCounts] = useState({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
+  const [treatmentTypeCounts, setTreatmentTypeCounts] = useState(
+    {
+      "John Doe": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
+      "Angela Merkel": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
+      "Sergen Yalçın": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 }
+    })
   const [appointments, setAppointments] = useState([])
   const [selectedDentists, setSelectedDentists] = useState([]);
   const [selectedTreatments, setSelectedTreatments] = useState([]);
@@ -48,12 +56,15 @@ export default function CalendarPage(props) {
   const [event, setSelectedEvent] = useState(null);
   const [selectedDateBegin, setSelectedDateBegin] = useState(null)
   const [selectedDateEnd, setSelectedDateEnd] = useState(null)
-
+  const [workDayCount, setWorkDayCount] = useState(0)
+  const [totalAppointmentCount, setTotalAppointmentCount] = useState(0)
+  const nowDate = new Date();
 
 
   useEffect(async () => {
     var events = await helpers.loadItems("", "", "", 0, 0);
     setAppointments(events);
+    getStatictics(events);
   }, []);
 
 
@@ -65,13 +76,13 @@ export default function CalendarPage(props) {
 
   const handleStartDateChange = (date) => {
     var startDate = new Date(date);
-    startDate.setHours(0,0,0,0);
+    startDate.setHours(0, 0, 0, 0);
     setSelectedDateBegin(startDate)
   }
 
   const handleEndDateChange = (date) => {
     var endDate = new Date(date);
-    endDate.setHours(23,59,0,0);
+    endDate.setHours(23, 59, 0, 0);
     setSelectedDateEnd(endDate)
   }
 
@@ -109,6 +120,7 @@ export default function CalendarPage(props) {
     var endlong = Boolean(selectedDateEnd) ? selectedDateEnd.getTime() : 0;
     var events = await helpers.loadItems(filterPatient, selectedDentistsString, selectedTreatmentsString, startlong, endlong);
     setAppointments(events);
+    getStatictics(events)
   }
 
   async function removeAppointment(event) {
@@ -117,187 +129,327 @@ export default function CalendarPage(props) {
 
 
 
+  function getStatictics(events) {
+
+    var workDayCount = 0;
+    if (Boolean(selectedDateBegin) && Boolean(selectedDateEnd)) {
+      var tempDate = new Date(selectedDateBegin.getTime());
+      while (tempDate.getTime() < selectedDateEnd.getTime()) {
+        if (tempDate.getDay() !== 5 && tempDate.getDay() !== 6) {
+          workDayCount++;
+        }
+        tempDate.setDate(tempDate.getDate() + 1);
+      }
+    }
+
+    setWorkDayCount(workDayCount)
+
+
+    var tempGains = ({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
+    var tempWorkLoads = ({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
+    var tempTreatmentCounts = (
+      {
+        "John Doe": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
+        "Angela Merkel": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
+        "Sergen Yalçın": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 }
+      })
+
+
+
+
+
+    events.map(e => {
+      tempGains[e.doctor.full_name] += e.type.price;
+      tempWorkLoads[e.doctor.full_name] += 1;
+      tempTreatmentCounts[e.doctor.full_name][e.type.type] += 1;
+    })
+
+
+    setGains(tempGains)
+    setWorkLoadCounts(tempWorkLoads)
+    setTreatmentTypeCounts(tempTreatmentCounts)
+
+    var totalAppointmentCount = Object.keys(events).length;
+
+    setTotalAppointmentCount(totalAppointmentCount)
+
+  }
+
+
+  function getGainsText() {
+    return ("Angela Merkel : " + gains['Angela Merkel'] + " - " + "John Doe : " + gains['John Doe'] + " - " + "Sergen Yalçın : " + gains['Sergen Yalçın'])
+  }
+
+  function getTreatmentCountText() {
+    return ("Angela Merkel : " + " Kanal tedavisi : " + treatmentTypeCounts['Angela Merkel']['Kanal tedavisi']
+      + " - Diş Bakımı : " + treatmentTypeCounts['Angela Merkel']['Diş bakımı']
+      + " - Diş beyazlatma : " + treatmentTypeCounts['Angela Merkel']['Diş beyazlatma']
+
+      + " ||| John Doe : " + " Kanal tedavisi : " + treatmentTypeCounts['John Doe']['Kanal tedavisi']
+      + " - Diş Bakımı : " + treatmentTypeCounts['John Doe']['Diş bakımı']
+      + " - Diş beyazlatma : " + treatmentTypeCounts['John Doe']['Diş beyazlatma']
+
+      + " ||| Sergen Yalçın : " + " Kanal tedavisi : " + treatmentTypeCounts['Sergen Yalçın']['Kanal tedavisi']
+      + " - Diş Bakımı : " + treatmentTypeCounts['Sergen Yalçın']['Diş bakımı']
+      + " - Diş beyazlatma : " + treatmentTypeCounts['Sergen Yalçın']['Diş beyazlatma'])
+  }
+
+
+  function getWorkLoadCountText() {
+    if (workDayCount !== 0) {
+      return ("Angela Merkel : " + parseInt(workLoadCounts['Angela Merkel']) / workDayCount + " - " + "John Doe : " + parseInt(workLoadCounts['John Doe']) / workDayCount + " - " + "Sergen Yalçın : " + parseInt(workLoadCounts['Sergen Yalçın']) / workDayCount);
+
+    }
+    else {
+      return ("Angela Merkel : " + workLoadCounts['Angela Merkel'] + " - " + "John Doe : " + workLoadCounts['John Doe'] + " - " + "Sergen Yalçın : " + workLoadCounts['Sergen Yalçın']);
+
+    }
+  }
+
+
+
+
+
 
 
 
   return (
- 
-    <div className='calendarpage'>
-      <div className='filter-calendar'>
 
-        <form className={classes.root} noValidate autoComplete='off'>
-          <TextField
-            id='standard-basic'
-            label='Enter a patient name'
-            value={filterPatient}
-            onChange={(event) => setFilterPatient(event.target.value)}
-          />
+      <div className='calendarpage'>
+        <div className='filter-calendar'>
+
+          <form className={classes.root} noValidate autoComplete='off'>
+            <TextField
+              id='standard-basic'
+              label='Enter a patient name'
+              value={filterPatient}
+              onChange={(event) => setFilterPatient(event.target.value)}
+            />
+          </form>
+
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify='space-around'>
+              <KeyboardDatePicker
+                disableToolbar
+                variant='inline'
+                format='MM/dd/yyyy'
+                margin='normal'
+                id='date-picker-inline'
+                label='Begin'
+                value={selectedDateBegin}
+                onChange={handleStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+              <KeyboardDatePicker
+                disableToolbar
+                variant='inline'
+                format='MM/dd/yyyy'
+                margin='normal'
+                id='date-picker-inline'
+                label='End'
+                value={selectedDateEnd}
+                onChange={handleEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
+
+
+          <div className='choose-dentist'>
+            <Multiselect
+              options={[{ name: 'John Doe', id: 1 }, { name: 'Angela Merkel', id: 2 }, { name: 'Sergen Yalçın', id: 3 }]} // Options to display in the dropdown
+              selectedValues={selectedDentists} // Preselected value to persist in dropdown
+              onSelect={onSelectDentistFunction} // Function will trigger on select event
+              onRemove={onRemoveDentistFunction} // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
+              placeholder="Choose a doctor"
+            />
+          </div>
+
+          <div className='choose-treatment'>
+
+            <Multiselect
+              options={[{ name: 'Kanal tedavisi', id: 1 }, { name: 'Diş beyazlatma', id: 2 }, { name: 'Diş bakımı', id: 3 }]} // Options to display in the dropdown
+              selectedValues={selectedTreatments} // Preselected value to persist in dropdown
+              onSelect={onSelectTreatmentFunction} // Function will trigger on select event
+              onRemove={onRemoveTreatmentFunction} // Function will trigger on remove event
+              displayValue="name" // Property name to display in the dropdown options
+              placeholder="Treatment Type"
+            />
+          </div>
+          <Button className='apply-button' onClick={() => filterResult()} variant='contained'>
+            APPLY
+        </Button>
+
+        <form>
+          <label>
+            {"Gains: " + getGainsText()}
+          </label>
+        </form>
+        <form>
+          <label>
+            {"Treatments: " + getTreatmentCountText()}
+          </label>
+        </form>
+        <form>
+          <label>
+            {"Workload: " + getWorkLoadCountText()}
+          </label>
         </form>
 
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid container justify='space-around'>
-            <KeyboardDatePicker
-              disableToolbar
-              variant='inline'
-              format='MM/dd/yyyy'
-              margin='normal'
-              id='date-picker-inline'
-              label='Begin'
-              value={selectedDateBegin}
-              onChange={handleStartDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-            <KeyboardDatePicker
-              disableToolbar
-              variant='inline'
-              format='MM/dd/yyyy'
-              margin='normal'
-              id='date-picker-inline'
-              label='End'
-              value={selectedDateEnd}
-              onChange={handleEndDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </Grid>
-        </MuiPickersUtilsProvider>
+
+        </div>
 
 
-        <div className='choose-dentist'>
-          <Multiselect
-            options={[{ name: 'John Doe', id: 1 }, { name: 'Angela Merkel', id: 2 }, { name: 'Sergen Yalçın', id: 3 }]} // Options to display in the dropdown
-            selectedValues={selectedDentists} // Preselected value to persist in dropdown
-            onSelect={onSelectDentistFunction} // Function will trigger on select event
-            onRemove={onRemoveDentistFunction} // Function will trigger on remove event
-            displayValue="name" // Property name to display in the dropdown options
+
+        <div className='calendar-component'>
+          <Calendar
+            localizer={localizer}
+            events={Object.values(appointments)}
+            defaultView={'month'}
+            step={60}
+
+            style={style}
+            timeslots={1}
+            showMultiDayTimes
+            onSelectEvent={(event) => onEventClick(event)}
+            components={{
+              timeSlotWrapper: ColoredDateCellWrapper,
+            }}
+            startAccessor='start'
+            endAccessor='end'
+            style={{ height: 550, width: 1200 }}
+            min={
+              new Date(
+                nowDate.getFullYear(),
+                nowDate.getMonth(),
+                nowDate.getDate(),
+                9
+              )
+            }
+
+            max={
+              new Date(
+                nowDate.getFullYear(),
+                nowDate.getMonth(),
+                nowDate.getDate(),
+                17
+              )
+            }
+
+            eventPropGetter={
+              (event, start, end, isSelected) => {
+                let newStyle = {
+                  backgroundColor: "purple",
+                  color: 'black',
+                  borderRadius: "0px",
+                  border: "none"
+                };
+          
+                if (event.doctor.full_name == "Sergen Yalçın"){
+                  newStyle.backgroundColor = "#FFE4E6"
+                  console.log(event.doctor.full_name)
+  
+                }
+                else if (event.doctor.full_name == "John Doe"){
+                  newStyle.backgroundColor = "#56CCF2"
+                  console.log(event.doctor.full_name)
+                }else{
+                  newStyle.backgroundColor = "#BB6BD9"
+                }
+          
+                return {
+                  className: "",
+                  style: newStyle
+                };
+              }
+            }
           />
         </div>
 
-        <div>
+        {Boolean(event) && <Modal
+          className="modal"
+          open={modalIsOpen}
+          onClose={handleClose}
+          disablePortal
+          disableEnforceFocus
+          disableAutoFocus
 
-          <Multiselect
-            options={[{ name: 'Kanal tedavisi', id: 1 }, { name: 'Diş beyazlatma', id: 2 }, { name: 'Diş bakımı', id: 3 }]} // Options to display in the dropdown
-            selectedValues={selectedTreatments} // Preselected value to persist in dropdown
-            onSelect={onSelectTreatmentFunction} // Function will trigger on select event
-            onRemove={onRemoveTreatmentFunction} // Function will trigger on remove event
-            displayValue="name" // Property name to display in the dropdown options
-          />
-        </div>
-        <Button className='apply-button' onClick={() => filterResult()} variant='contained'>
-          APPLY
-        </Button>
+        >
+          <div className="modal-content">
+            <h5>Patient Detail</h5>
+            <p className="modal-title">Full Name</p>
+            <TextField
+              defaultValue={event.patient_name}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+            <p className="modal-title">Phone Number</p>
+            <TextField
+              defaultValue={event.patient_phone}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+            <p className="modal-title">Age</p>
+            <TextField
+              defaultValue={event.patient_age}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+            <p className="modal-title">Type of Treatment</p>
+            <TextField
+              defaultValue={event.type.type}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+
+            <p className="modal-title">Doctor</p>
+            <TextField
+              defaultValue={event.doctor.full_name}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+
+            <p className="modal-title">Hour</p>
+            <TextField
+              defaultValue={event.hour}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+            <p className="modal-title">Description</p>
+            <TextField
+              defaultValue={event.description}
+              margin="normal"
+              variant="outlined"
+              disabled
+            />
+            <p className="modal-title"></p>
+            <div className="button-wrapper">
+              <Button className='apply-button'
+                onClick={() => removeAppointment(event)}
+                variant='contained'>
+                Remove
+          </Button>
+            </div>
+          </div>
+        </Modal>}
+
+
+
       </div>
 
+ 
 
-
-      <div className='calendar-component'>
-        <Calendar
-          localizer={localizer}
-          events={Object.values(appointments)}
-          defaultView={'month'}
-          step={60}
-          style={style}          
-          timeslots={1} 
-          min={
-            new Date(
-              nowDate.getFullYear(), 
-              nowDate.getMonth(), 
-              nowDate.getDate(), 
-              9
-            )
-          }
-
-          max={
-            new Date(
-              nowDate.getFullYear(), 
-              nowDate.getMonth(), 
-              nowDate.getDate(), 
-              17
-            )
-          }
-          showMultiDayTimes
-          onSelectEvent={(event) => onEventClick(event)}
-          components={{
-            timeSlotWrapper: ColoredDateCellWrapper,
-          }}
-          startAccessor='start'
-          endAccessor='end'
-          style={{ height: 550, width: 1200 }}
-        />
-      </div>
-
-      { Boolean(event) && <Modal
-        className="modal"
-        open={modalIsOpen}
-        onClose={handleClose}
-        disablePortal
-        disableEnforceFocus
-        disableAutoFocus
-
-      >
-        <div className="modal-content">
-          <h5>Patient Detail</h5>
-          <p className="modal-title">Full Name</p>
-          <TextField
-            defaultValue={event.patient_name}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-          <p className="modal-title">Phone Number</p>
-          <TextField
-            defaultValue={event.patient_phone}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-          <p className="modal-title">Age</p>
-          <TextField
-            defaultValue={event.patient_age}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-          <p className="modal-title">Type of Treatment</p>
-          <TextField
-            defaultValue={event.type.type}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-
-          <p className="modal-title">Doctor</p>
-          <TextField
-            defaultValue={event.doctor.full_name}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-
-          <p className="modal-title">Hour</p>
-          <TextField
-            defaultValue={event.hour}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-          <p className="modal-title">Description</p>
-          <TextField
-            defaultValue={event.description}
-            margin="normal"
-            variant="outlined"
-            disabled
-          />
-
-          <Button className='apply-button' onClick={() => removeAppointment(event)} variant='contained'>
-            Remove
-        </Button>
-        </div>
-      </Modal>}
-
-    </div>
-  )
+      
+    )
 }
