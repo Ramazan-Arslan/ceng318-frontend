@@ -100,6 +100,7 @@ background-color: white !important;
 .button-wrapper {
   display: flex ;
   align-items: center ;
+  margin-top: 5%;
   justify-content: center ;
 }
 
@@ -139,4 +140,7 @@ h5 {
 .rbc-toolbar button:active, .rbc-toolbar button.rbc-active {
   color: #FFFFFF !important;
   background-color: #DC2626 !important;
+}
+.rbc-show-more{
+  color: red !important;
 }
