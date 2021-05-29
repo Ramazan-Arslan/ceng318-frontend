@@ -201,7 +201,7 @@ export default function CalendarPage(props) {
           events={Object.values(appointments)}
           defaultView={'month'}
           step={60}
-
+         
           style={style}
           timeslots={1}
           showMultiDayTimes
@@ -220,7 +220,6 @@ export default function CalendarPage(props) {
               9
             )
           }
-
           max={
             new Date(
               nowDate.getFullYear(), 
@@ -228,6 +227,33 @@ export default function CalendarPage(props) {
               nowDate.getDate(), 
               17
             )
+          }
+          eventPropGetter={
+            (event, start, end, isSelected) => {
+              let newStyle = {
+                backgroundColor: "purple",
+                color: 'black',
+                borderRadius: "0px",
+                border: "none"
+              };
+        
+              if (event.doctor.full_name == "Sergen Yalçın"){
+                newStyle.backgroundColor = "#FFE4E6"
+                console.log(event.doctor.full_name)
+
+              }
+              else if (event.doctor.full_name == "John Doe"){
+                newStyle.backgroundColor = "#56CCF2"
+                console.log(event.doctor.full_name)
+              }else{
+                newStyle.backgroundColor = "#BB6BD9"
+              }
+        
+              return {
+                className: "",
+                style: newStyle
+              };
+            }
           }
         />
       </div>
