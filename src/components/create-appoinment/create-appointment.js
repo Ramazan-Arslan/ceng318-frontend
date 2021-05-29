@@ -69,7 +69,7 @@ export default function CreateAppointment() {
     var treatmentId = getTreatmentId.getId(typeOfTreatment);
     var dentistId = getDentistId.getId(dentist);
 
-    var isInputOK = Boolean(selectedDate.getTime()) && Boolean(name) && Boolean(age) && Boolean(gender) 
+    var isInputOK = Boolean(selectedDate) && Boolean(name) && Boolean(age) && Boolean(gender) 
     && Boolean(description) && (treatmentId !== -1) && Boolean(phoneNumber) && (dentistId !== -1);
 
     if (isInputOK)
