@@ -438,15 +438,30 @@ export default function CalendarPage(props) {
           <div className='percentage-dentist-all'>
             <div className='percentage-dentist'>
               <p className='percentage-dentist-p'>Sergen Yalçın</p>
-              <BorderLinearProgressDentist1 variant="determinate" value={workLoadCounts['Sergen Yalçın']} />
+              <BorderLinearProgressDentist1 variant="determinate" value={ 100 * parseInt(workLoadCounts['Sergen Yalçın']) / (workDayCount * 7)} />
+              <form>
+                <label>
+                  {"Gain: " + gains['Sergen Yalçın']}
+                </label>
+              </form>
             </div>
             <div className='percentage-dentist'>
               <p className='percentage-dentist-p'>John Doe</p>
-              <BorderLinearProgressDentist2 variant="determinate" value={workLoadCounts['John Doe']} />
+              <BorderLinearProgressDentist2 variant="determinate" value={ 100 * parseInt(workLoadCounts['John Doe']) / (workDayCount * 7)} />
+              <form>
+                <label>
+                  {"Gain: " + gains['John Doe']}
+                </label>
+              </form>
             </div>
             <div className='percentage-dentist'>
               <p className='percentage-dentist-p'>Angela Merkel</p>
-              <BorderLinearProgressDentist3 variant="determinate" value={workLoadCounts['Angela Merkel']} />
+              <BorderLinearProgressDentist3 variant="determinate" value={ 100 * parseInt(workLoadCounts['Angela Merkel']) / (workDayCount * 7)} />
+              <form>
+                <label>
+                  {"Gain: " + gains['Angela Merkel']}
+                </label>
+              </form>
             </div>
           </div>
         </div>

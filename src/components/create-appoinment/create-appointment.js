@@ -183,6 +183,7 @@ export default function CreateAppointment() {
             label="Date picker dialog"
             minDate={new Date()}
             format="MM/dd/yyyy"
+            shouldDisableDate={(date) => { return date.getDay() === 0 || date.getDay() === 6;}}            
             value={selectedDate}
             onChange={(date) => { handleDateChange(date) }}
             KeyboardButtonProps={{
