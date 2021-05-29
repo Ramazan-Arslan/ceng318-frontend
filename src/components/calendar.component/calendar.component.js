@@ -102,7 +102,7 @@ export default function CalendarPage(props) {
   const [totalAppointmentCount, setTotalAppointmentCount] = useState(0)
   const [tempEvent, setTempEvent] = useState({})
   const nowDate = new Date();
-    
+
 
 
   useEffect(async () => {
@@ -370,31 +370,31 @@ export default function CalendarPage(props) {
 
 
 
-        <div className='calendar-component'>
-          <Calendar
-            localizer={localizer}
-            events={Object.values(appointments)}
-            defaultView={'month'}
-            step={60}
+      <div className='calendar-component'>
+        <Calendar
+          localizer={localizer}
+          events={Object.values(appointments)}
+          defaultView={'month'}
+          step={60}
 
-            style={style}
-            timeslots={1}
-            showMultiDayTimes
-            onSelectEvent={(event) => onEventClick(event)}
-            components={{
-              timeSlotWrapper: ColoredDateCellWrapper,
-            }}
-            startAccessor='start'
-            endAccessor='end'
-            style={{ height: 550, width: 1150 }}
-            min={
-              new Date(
-                nowDate.getFullYear(),
-                nowDate.getMonth(),
-                nowDate.getDate(),
-                9
-              )
-            }
+          style={style}
+          timeslots={1}
+          showMultiDayTimes
+          onSelectEvent={(event) => onEventClick(event)}
+          components={{
+            timeSlotWrapper: ColoredDateCellWrapper,
+          }}
+          startAccessor='start'
+          endAccessor='end'
+          style={{ height: 550, width: 1150 }}
+          min={
+            new Date(
+              nowDate.getFullYear(),
+              nowDate.getMonth(),
+              nowDate.getDate(),
+              9
+            )
+          }
 
           max={
             new Date(
@@ -433,7 +433,26 @@ export default function CalendarPage(props) {
             }
           }
         />
+
+        <div className={classes.root}>
+          <div className='percentage-dentist-all'>
+            <div className='percentage-dentist'>
+              <p className='percentage-dentist-p'>Sergen Yalçın</p>
+              <BorderLinearProgressDentist1 variant="determinate" value={workLoadCounts['Sergen Yalçın']} />
+            </div>
+            <div className='percentage-dentist'>
+              <p className='percentage-dentist-p'>John Doe</p>
+              <BorderLinearProgressDentist2 variant="determinate" value={workLoadCounts['John Doe']} />
+            </div>
+            <div className='percentage-dentist'>
+              <p className='percentage-dentist-p'>Angela Merkel</p>
+              <BorderLinearProgressDentist3 variant="determinate" value={workLoadCounts['Angela Merkel']} />
+            </div>
+          </div>
+        </div>
       </div>
+
+
 
       {Boolean(event) && <Modal
         className="modal"
@@ -476,25 +495,6 @@ export default function CalendarPage(props) {
             disabled
           />
 
-           <div className={classes.root}>
-             <div className='percentage-dentist-all'>
-          <div className='percentage-dentist'>
-            <p className='percentage-dentist-p'>Sergen Yalçın</p>
-            <BorderLinearProgressDentist1  variant="determinate" value={workLoadCounts['Sergen Yalçın']} />
-          </div>
-          <div className='percentage-dentist'>
-            <p className='percentage-dentist-p'>John Doe</p>
-          <BorderLinearProgressDentist2 variant="determinate" value={workLoadCounts['John Doe']} />
-          </div>
-          <div className='percentage-dentist'>
-            <p className='percentage-dentist-p'>Angela Merkel</p>
-          <BorderLinearProgressDentist3 variant="determinate" value={workLoadCounts['Angela Merkel']} />
-          </div>
-          </div>
-        </div>
-        </div>
-
-
           <p className="modal-title">Doctor</p>
           <TextField
             defaultValue={event.doctor.full_name}
@@ -526,7 +526,7 @@ export default function CalendarPage(props) {
               Remove
           </Button>
           </div>
-          
+
           <div className="button-wrapper">
             <Button className='apply-button'
               onClick={() => updateAppointment(tempEvent)}
@@ -536,13 +536,6 @@ export default function CalendarPage(props) {
           </div>
         </div>
       </Modal>}
-
-
-
-    </div>
-
-
-
-
+    </div >
   )
 }

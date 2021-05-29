@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import "./create-appointment.css";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import {  MuiPickersUtilsProvider,  KeyboardDatePicker} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Radio from "@material-ui/core/Radio";
@@ -17,24 +17,21 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import calendarHelpers from '../calendar.component/calendar-component-helper';
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
-  const [dentist, setDentist] = useState("");  
+  const [dentist, setDentist] = useState("");
   const [typeOfTreatment, setTypeOfTreatment] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [description, setDescription] = useState("");
   const [events, setEvents] = useState([]);
-  const [closedHours,setClosedHours] = useState("");
+  const [closedHours, setClosedHours] = useState("");
   const [showHours, setShowHours] = useState(false);
   const [isSelected, setSelected] = useState(false);
-  
+
   useEffect(async () => {
     var events = await calendarHelpers.loadItems("", "", "", 0, 0);
     setEvents(events);
@@ -48,14 +45,13 @@ export default function CreateAppointment() {
 
 
   const handleDateChange = (date) => {
-    date.setHours(0,0,0,0);
+    date.setHours(0, 0, 0, 0);
     setSelectedDate(date);
     setShowHours(false);
   };
 
   const handleHourChange = (hour) => {
     setSelectedHour(hour);
-    console.log(selectedHour);
 
   };
 
@@ -88,34 +84,31 @@ export default function CreateAppointment() {
     setShowHours(false);
   };
 
-  function setHours()
-  {
-    setClosedHours("");
-    if(Boolean(selectedDate)&&Boolean(dentist))
-    {
+  function setHours() {
+    var closedHoursString = "";
+    if (Boolean(selectedDate) && Boolean(dentist)) {
       events.map(e => {
 
         var appointmentDate = new Date(e.date);
-        if(e.doctor.full_name === dentist 
-          && appointmentDate.getDate() === selectedDate.getDate() 
-          &&  appointmentDate.getMonth() === selectedDate.getMonth() 
-          && appointmentDate.getFullYear() === selectedDate.getFullYear())
-        {
-          setClosedHours(closedHours+e.hour);  
+        if (e.doctor.full_name === dentist
+          && appointmentDate.getDate() === selectedDate.getDate()
+          && appointmentDate.getMonth() === selectedDate.getMonth()
+          && appointmentDate.getFullYear() === selectedDate.getFullYear()) {
+          closedHoursString += e.hour + "-";
         }
       })
+      setClosedHours(closedHoursString)
       setShowHours(true);
-    }  
+    }
   }
 
-  function getHours()
-  {
+  function getHours() {
 
-    var hourArray = ["09.00-10.00","10.00-11.00","11.00-12.00","13.00-14.00","14.00-15.00","15.00-16.00","16.00-17.00"]
-    return(
+    var hourArray = ["09.00-10.00", "10.00-11.00", "11.00-12.00", "13.00-14.00", "14.00-15.00", "15.00-16.00", "16.00-17.00"]
+    return (
       <div className="avaible-time">
-      <p className="form-titles">Available Time</p>
-      
+        <p className="form-titles">Available Time</p>
+
         {getHourButton(hourArray[0])}
         {getHourButton(hourArray[1])}
         {getHourButton(hourArray[2])}
@@ -123,63 +116,58 @@ export default function CreateAppointment() {
         {getHourButton(hourArray[4])}
         {getHourButton(hourArray[5])}
         {getHourButton(hourArray[6])}
-      
-    </div>
+
+      </div>
     )
   }
 
-  function getHourButton(hour)
-  {
-    if(closedHours.includes(hour))
-    {
-      return(
+  function getHourButton(hour) {
+
+    if (closedHours.includes(hour)) {
+      return (
         <Button variant="outlined" color="secondary" disabled={true}  >{hour}</Button>
       )
     }
 
-    else
-    {
-      return(
-        <Button  className={selectedHour===hour ? 'button-selected'  : 'button-unselected' } variant="outlined" color="primary" onClick={ () => handleHourChange(hour)}  >{hour}</Button>
+    else {
+      return (
+        <Button className={selectedHour === hour ? 'button-selected' : 'button-unselected'} variant="outlined" color="primary" onClick={() => handleHourChange(hour)}  >{hour}</Button>
       )
     }
-    
+
   }
 
 
-  function onClickSetAppointment()
-  {
+  function onClickSetAppointment() {
     var treatmentId = getTreatmentId.getId(typeOfTreatment);
     var dentistId = getDentistId.getId(dentist);
 
-    var isInputOK = Boolean(selectedDate) && Boolean(name) && Boolean(selectedHour) && Boolean(age) && Boolean(gender) 
-    && Boolean(description) && (treatmentId !== -1) && Boolean(phoneNumber) && (dentistId !== -1);
+    var isInputOK = Boolean(selectedDate) && Boolean(name) && Boolean(selectedHour) && Boolean(age) && Boolean(gender)
+      && Boolean(description) && (treatmentId !== -1) && Boolean(phoneNumber) && (dentistId !== -1);
 
-    if (isInputOK)
-    {
+    if (isInputOK) {
       var hourArray = selectedHour.split("-")[0];
       var hour = hourArray.split(".")[0];
       var minute = hourArray.split(".")[1];
       selectedDate.setHours(hour, minute, 0, 0);
 
       var dateLong = selectedDate.getTime();
-      var json = 
+      var json =
       {
-        date : dateLong,        
-        hour : selectedHour,
-        doctor : { id : dentistId },
-        type : {id : treatmentId } ,
-        patient_name : name,
-        patient_gender : gender,
-        patient_phone : phoneNumber,
-        patient_age : parseInt(age),        
-        description : description
+        date: dateLong,
+        hour: selectedHour,
+        doctor: { id: dentistId },
+        type: { id: treatmentId },
+        patient_name: name,
+        patient_gender: gender,
+        patient_phone: phoneNumber,
+        patient_age: parseInt(age),
+        description: description
       }
 
       helpers.createAppointment(json);
     }
-    else
-    {
+    else {
       alert("There exists empty inputs !");
     }
   }
@@ -196,7 +184,7 @@ export default function CreateAppointment() {
             minDate={new Date()}
             format="MM/dd/yyyy"
             value={selectedDate}
-            onChange={(date) => {handleDateChange(date)}}
+            onChange={(date) => { handleDateChange(date) }}
             KeyboardButtonProps={{
               "aria-label": "change date",
             }}
@@ -205,7 +193,7 @@ export default function CreateAppointment() {
 
         <p className="form-titles">Dentist</p>
         <Select
-        className="type-of-treatment"
+          className="type-of-treatment"
           value={dentist}
           margin="normal"
           variant="outlined"
@@ -217,14 +205,14 @@ export default function CreateAppointment() {
         </Select>
 
         <Button
-            className='choose-dentist-button'
-            variant='contained'
-            onClick={() => setHours()}
-          >
-            GET HOURS
+          className='choose-dentist-button'
+          variant='contained'
+          onClick={() => setHours()}
+        >
+          GET HOURS
           </Button>
         {showHours && getHours()}
-    
+
 
         <p className="form-titles form-titles-header">Patient Details</p>
         <p className="form-titles">Full Name</p>
@@ -265,7 +253,7 @@ export default function CreateAppointment() {
         <p className="form-titles">Type of Treatment</p>
 
         <Select
-        className="type-of-treatment"
+          className="type-of-treatment"
           value={typeOfTreatment}
           margin="normal"
           variant="outlined"
@@ -276,7 +264,7 @@ export default function CreateAppointment() {
           <MenuItem value={"Diş bakımı"}>Diş bakımı</MenuItem>
         </Select>
 
-        
+
 
         <p className="form-titles">Phone Number</p>
         <TextField
@@ -297,8 +285,8 @@ export default function CreateAppointment() {
         <Button
           variant="contained"
           color="primary"
-        
-          onClick={() => {onClickSetAppointment()}}
+
+          onClick={() => { onClickSetAppointment() }}
           className="setButton">
           Set Appointment
         </Button>
