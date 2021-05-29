@@ -140,3 +140,17 @@ h5 {
   color: #FFFFFF !important;
   background-color: #DC2626 !important;
 }
+
+.makeStyles-root-1 > * {
+  width: 25ch !important;
+}
+
+.percentage-dentist{
+  margin: 5px 20px;
+  width: 25ch !important;
+}
+.percentage-dentist-p{
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+}

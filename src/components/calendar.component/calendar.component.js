@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import './calendar.component.css'
 import style from 'react-big-calendar/lib/css/react-big-calendar.css'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
 import { Multiselect } from 'multiselect-react-dropdown'
 import Button from '@material-ui/core/Button'
@@ -13,6 +13,46 @@ import Grid from '@material-ui/core/Grid'
 import DateFnsUtils from '@date-io/date-fns'
 import { MuiPickersUtilsProvider, KeyboardDatePicker, } from '@material-ui/pickers'
 import helpers from './calendar-component-helper'
+import LinearProgress from '@material-ui/core/LinearProgress';
+const BorderLinearProgressDentist1 = withStyles((theme) => ({
+  root: {
+    height: 25,
+    borderRadius: 5,
+  },
+  colorPrimary: {
+    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: "#FFE4E6",
+  },
+}))(LinearProgress);
+const BorderLinearProgressDentist2 = withStyles((theme) => ({
+  root: {
+    height: 25,
+    borderRadius: 5,
+  },
+  colorPrimary: {
+    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: "#56CCF2",
+  },
+}))(LinearProgress);
+const BorderLinearProgressDentist3 = withStyles((theme) => ({
+  root: {
+    height: 25,
+    borderRadius: 5,
+  },
+  colorPrimary: {
+    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: "#BB6BD9",
+  },
+}))(LinearProgress);
 
 const localizer = momentLocalizer(moment)
 const nowDate = new Date();
@@ -29,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(1),
       width: '25ch',
+      flexGrow: 1,
+
     },
   },
 }))
@@ -59,7 +101,7 @@ export default function CalendarPage(props) {
   const [workDayCount, setWorkDayCount] = useState(0)
   const [totalAppointmentCount, setTotalAppointmentCount] = useState(0)
   const nowDate = new Date();
-
+    
 
   useEffect(async () => {
     var events = await helpers.loadItems("", "", "", 0, 0);
@@ -197,8 +239,9 @@ export default function CalendarPage(props) {
 
   function getWorkLoadCountText() {
     if (workDayCount !== 0) {
-      return ("Angela Merkel : " + parseInt(workLoadCounts['Angela Merkel']) / workDayCount + " - " + "John Doe : " + parseInt(workLoadCounts['John Doe']) / workDayCount + " - " + "Sergen Yalçın : " + parseInt(workLoadCounts['Sergen Yalçın']) / workDayCount);
-
+      
+      return ("Angela Merkel : " + 100 *parseInt(workLoadCounts['Angela Merkel']) / (workDayCount * 7) + " - " + "John Doe : " + 100 * parseInt(workLoadCounts['John Doe']) / (workDayCount * 7) + " - " + "Sergen Yalçın : " + 100 * parseInt(workLoadCounts['Sergen Yalçın']) /  (workDayCount * 7));
+      
     }
     else {
       return ("Angela Merkel : " + workLoadCounts['Angela Merkel'] + " - " + "John Doe : " + workLoadCounts['John Doe'] + " - " + "Sergen Yalçın : " + workLoadCounts['Sergen Yalçın']);
@@ -369,6 +412,22 @@ export default function CalendarPage(props) {
               }
             }
           />
+           <div className={classes.root}>
+             <div className='percentage-dentist-all'>
+          <div className='percentage-dentist'>
+            <p className='percentage-dentist-p'>Sergen Yalçın</p>
+            <BorderLinearProgressDentist1  variant="determinate" value={workLoadCounts['Sergen Yalçın']} />
+          </div>
+          <div className='percentage-dentist'>
+            <p className='percentage-dentist-p'>John Doe</p>
+          <BorderLinearProgressDentist2 variant="determinate" value={workLoadCounts['John Doe']} />
+          </div>
+          <div className='percentage-dentist'>
+            <p className='percentage-dentist-p'>Angela Merkel</p>
+          <BorderLinearProgressDentist3 variant="determinate" value={workLoadCounts['Angela Merkel']} />
+          </div>
+          </div>
+        </div>
         </div>
 
         {Boolean(event) && <Modal
