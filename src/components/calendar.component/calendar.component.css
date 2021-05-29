@@ -47,7 +47,7 @@ background-color: white !important;
 }
 
 .makeStyles-root-1 > * {
-  width: 200px !important;
+  
   margin: 8px;
 }
 
@@ -63,16 +63,16 @@ background-color: white !important;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px !important;
-  width: 210px !important;
+
   margin-left: 5px;
 }
 .MuiFormControl-marginNormal {
-  width: 210px !important;
+ 
   margin-left: 5px !important;
 }
 .choose-treatment{
   margin-bottom: 20px !important;
-  width: 210px !important;
+  
   margin-left: 5px;
 }
 .filter-dentist-list {
@@ -118,6 +118,7 @@ background-color: white !important;
   align-items: center;
   justify-content: center ;
   overflow: scroll;
+
 }
 
 .modal-content {
@@ -139,4 +140,7 @@ h5 {
 .rbc-toolbar button:active, .rbc-toolbar button.rbc-active {
   color: #FFFFFF !important;
   background-color: #DC2626 !important;
+}
+.rbc-btn-group2 > button:last-child:not(:first-child) {
+display: none;
 }

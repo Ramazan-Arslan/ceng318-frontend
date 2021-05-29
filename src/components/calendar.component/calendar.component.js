@@ -322,7 +322,7 @@ export default function CalendarPage(props) {
             }}
             startAccessor='start'
             endAccessor='end'
-            style={{ height: 550, width: 1200 }}
+            style={{ height: 550, width: 1150 }}
             min={
               new Date(
                 nowDate.getFullYear(),
