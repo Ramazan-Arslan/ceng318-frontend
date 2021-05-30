@@ -210,11 +210,12 @@ export default function CalendarPage(props) {
   function getTreatmentCountText() {
     var treatmentText="";
     dentists.forEach(element => {
-      treatmentText += " | " + element.name + " : ";
+      treatmentText += element.name + " : ";
       treatments.forEach(treatmentElement =>
         {
-          treatmentText += " | " + treatmentElement.name +" : " + treatmentTypeCounts[element.name][treatmentElement.name] + "\n";
+          treatmentText += treatmentElement.name +" : " + treatmentTypeCounts[element.name][treatmentElement.name] + "  ";
         })
+      treatmentText += " ~~~~ "
      
     });
     return treatmentText;
@@ -372,18 +373,20 @@ export default function CalendarPage(props) {
             placeholder="Treatment Type"
           />
         </div>
-        <Button className='apply-button' onClick={() => filterResult()} variant='contained'>
-          APPLY
+        <div className='filter-buttons'>
+          <Button className='apply-button buttonfilter' onClick={() => filterResult()} variant='contained'>
+            APPLY
+          </Button>
+
+
+          <Button className='buttonfilter' variant="contained" onClick={() => setStatisticsModal(true)}>
+          See Statics
         </Button>
 
-
-        <Button variant="contained" style={{marginTop:"20px"}} onClick={() => setStatisticsModal(true)}>
-        See Statics
-      </Button>
-
-        <Button variant="contained" color="secondary" style={{marginTop:"120px"}} startIcon={<DeleteIcon />} onClick={() => setDeleteModal(true)}>
-        Delete Appointments
-      </Button>
+          <Button className='buttonfilter' variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={() => setDeleteModal(true)}>
+          Delete Appointments
+        </Button>
+      </div>
       </div>
       <Modal
         className="delete-appointment"
@@ -459,7 +462,7 @@ export default function CalendarPage(props) {
          <div className="statistics-modal-content">
          <form>
           <label>
-            {"Treatments: " + getTreatmentCountText()}
+            {"Treatments: " +  getTreatmentCountText()}
           </label>
         </form>
          </div>
