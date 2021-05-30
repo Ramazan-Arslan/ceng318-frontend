@@ -52,9 +52,18 @@ export default function CreateAppointment() {
 
 
   const handleDateChange = (date) => {
-    date.setHours(0, 0, 0, 0);
-    setSelectedDate(date);
-    setShowHours(false);
+    if(Boolean(date))
+    {
+      date.setHours(0, 0, 0, 0);
+      setSelectedDate(date);
+      setShowHours(false);
+    }
+    else
+    {
+      setSelectedDate(null);
+      setShowHours(false);
+    }
+  
   };
 
   const handleHourChange = (hour) => {
