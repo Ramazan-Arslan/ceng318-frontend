@@ -200,3 +200,31 @@ display: none;
 }
 
 
+.statistics-modal{
+  color:black;
+  height: auto !important;
+  width: auto !important; 
+  text-align: center;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  justify-content: center ;
+}
+
+.statistics-modal-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  padding: 10px 25px !important;
+  border-radius: 4px ;
+  background-color:white !important;
+}
+
+.filter-buttons {
+  height: 200px;
+  padding: 0 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: space-between;
+}
