@@ -222,7 +222,7 @@ display: none;
 
 .filter-buttons {
   height: 200px;
-  padding: 0 50px;
+  padding: 0 38px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
