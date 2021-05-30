@@ -2,7 +2,8 @@ const getTreatments = {
     get: function () {
         
 
-        return [{ name: 'Kanal tedavisi', id: 1 }, { name: 'Diş beyazlatma', id: 2 }, { name: 'Diş bakımı', id: 3 }];
+        return [{ name: 'Root Canal Treatment', id: 1 }, { name: 'Teeth whitening', id: 2 }, { name: 'Dental Care', id: 3 },
+        { name: 'Tooth extraction', id: 5 }, { name: 'Routine Control', id: 6 }];
     }
 };
 

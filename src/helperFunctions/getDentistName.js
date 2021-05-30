@@ -4,14 +4,13 @@ const helpers = {
 
         switch (id) {
             case 1:
-                returnedName ="John Doe";
+                returnedName ="Halil Biricik";
                 break;
-
             case 2:
-                returnedName = "Angela Merkel";
+                returnedName = "Nazli Cosar";
                 break;
             case 3:
-                returnedName = "Sergen Yalçın";
+                returnedName = "Sena Güzel";
                 break;
             default:
                 returnedName = "";

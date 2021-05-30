@@ -3,14 +3,14 @@ const helpers = {
         var returnedId = -1;
 
         switch (dentist) {
-            case "John Doe":
+            case "Halil Biricik":
                 returnedId = 1;
                 break;
 
-            case "Angela Merkel":
+            case "Nazli Cosar":
                 returnedId = 2;
                 break;
-            case "Sergen Yalçın":
+            case "Sena Güzel":
                 returnedId = 3;
                 break;
             default:

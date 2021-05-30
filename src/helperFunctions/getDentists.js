@@ -2,9 +2,9 @@ const getDentists = {
     get: function () {
         
 
-        return [{ name: 'John Doe', id: 1, color:"#56CCF2" }, 
-        { name: 'Angela Merkel', id: 2,  color:"#BB6BD9" }, 
-        { name: 'Sergen Yalçın', id: 3 ,  color:"#FFE4E6"}];
+        return [{ name: 'Halil Biricik', id: 1, color:"#56CCF2" }, 
+        { name: 'Nazli Cosar', id: 2,  color:"#BB6BD9" }, 
+        { name: 'Sena Güzel', id: 3 ,  color:"rgb(177 75 83)"}];
     }
 };
 

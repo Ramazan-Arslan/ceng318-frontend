@@ -3,15 +3,22 @@ const helpers = {
         var returnedId = -1;
 
         switch (name) {
-            case "Kanal tedavisi":
+            case "Root Canal Treatment":
                 returnedId = 1;
                 break;
 
-            case "Diş beyazlatma":
+            case "Teeth whitening":
                 returnedId = 2;
                 break;
-            case "Diş bakımı":
+            case "Dental Care":
                 returnedId = 3;
+                break;
+
+            case "Tooth extraction":
+                returnedId = 5;
+                break;
+            case "Routine Control":
+                returnedId = 6;
                 break;
             default:
                 returnedId = -1;

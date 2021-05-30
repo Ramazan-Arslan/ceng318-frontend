@@ -4,14 +4,21 @@ const helpers = {
 
         switch (id) {
             case 1:
-                returnedName ="Kanal tedavisi";
+                returnedName = "Root Canal Treatment";
                 break;
 
             case 2:
-                returnedName = "Diş beyazlatma";
+                returnedName = "Teeth whitening";
                 break;
             case 3:
-                returnedName = "Diş bakımı";
+                returnedName = "Dental Care";
+                break;
+
+            case 5:
+                returnedName = "Tooth extraction";
+                break;
+            case 6:
+                returnedName = "Routine Control";
                 break;
             default:
                 returnedName = "";

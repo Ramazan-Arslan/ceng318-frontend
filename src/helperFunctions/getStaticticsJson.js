@@ -9,7 +9,7 @@ const getJsons = {
         for(var i=0;i<dentists.length;i++)
         {
             var name = dentists[i].name;
-            json[name]="0";
+            json[name]=0;
             
         }
 
@@ -20,14 +20,21 @@ const getJsons = {
 
     getTreatments: function () {
         var dentists = getDentists.get();
+        var treatments = getTreatments.get();
         var json ={}
 
         for(var i=0;i<dentists.length;i++)
         {
-            var name = dentists[i].name;
-            json[name]="0";
-            
+            var dentistName = dentists[i].name;
+            var treatmentJson={}
+            for(var j=0;j<treatments.length;j++)
+            {
+                var treatmentName = treatments[j].name; 
+                treatmentJson[treatmentName]=0;                    
+            }
+            json[dentistName]=treatmentJson;
         }
+        return json;
 
     },
 
@@ -39,10 +46,10 @@ const getJsons = {
         for(var i=0;i<dentists.length;i++)
         {
             var name = dentists[i].name;
-            json[name]="0";
+            json[name]=0;
             
         }
-
+        return json;
     }
 
 };

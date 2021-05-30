@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import { Multiselect } from 'multiselect-react-dropdown'
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import helpers from './create-appointment-helper';
@@ -16,6 +17,12 @@ import getDentistId from '../../helperFunctions/getDentistId';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import calendarHelpers from '../calendar.component/calendar-component-helper';
+import getDentists from '../../helperFunctions/getDentists'
+import getTreatments from '../../helperFunctions/getTreatments'
+
+const dentists = getDentists.get();
+const treatments = getTreatments.get();
+
 
 export default function CreateAppointment() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -137,7 +144,6 @@ export default function CreateAppointment() {
 
   }
 
-
   function onClickSetAppointment() {
     var treatmentId = getTreatmentId.getId(typeOfTreatment);
     var dentistId = getDentistId.getId(dentist);
@@ -183,7 +189,7 @@ export default function CreateAppointment() {
             label="Date picker dialog"
             minDate={new Date()}
             format="MM/dd/yyyy"
-            shouldDisableDate={(date) => { return date.getDay() === 0 || date.getDay() === 6;}}            
+            shouldDisableDate={(date) => { return date.getDay() === 0 || date.getDay() === 6; }}
             value={selectedDate}
             onChange={(date) => { handleDateChange(date) }}
             KeyboardButtonProps={{
@@ -200,9 +206,10 @@ export default function CreateAppointment() {
           variant="outlined"
           onChange={(event) => { handleDentistChange(event.target.value) }}
         >
-          <MenuItem value={"John Doe"}>John Doe</MenuItem>
-          <MenuItem value={"Angela Merkel"}>Angela Merkel</MenuItem>
-          <MenuItem value={"Sergen Yalçın"}>Sergen Yalçın</MenuItem>
+           {dentists.map((item, index) =>
+            <MenuItem value={item.name}>{item.name}</MenuItem>
+          )}
+         
         </Select>
 
         <Button
@@ -253,6 +260,7 @@ export default function CreateAppointment() {
 
         <p className="form-titles">Type of Treatment</p>
 
+
         <Select
           className="type-of-treatment"
           value={typeOfTreatment}
@@ -260,9 +268,10 @@ export default function CreateAppointment() {
           variant="outlined"
           onChange={(event) => { handleTypeOfTreatmentChange(event.target.value) }}
         >
-          <MenuItem value={"Kanal tedavisi"}>Kanal tedavisi</MenuItem>
-          <MenuItem value={"Diş beyazlatma"}>Diş beyazlatma</MenuItem>
-          <MenuItem value={"Diş bakımı"}>Diş bakımı</MenuItem>
+          {treatments.map((item, index) =>
+            <MenuItem value={item.name}>{item.name}</MenuItem>
+          )}
+          
         </Select>
 
 

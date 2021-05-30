@@ -51,14 +51,9 @@ const useStyles = makeStyles((theme) => ({
 export default function CalendarPage(props) {
   const classes = useStyles()
   const [filterPatient, setFilterPatient] = useState("")
-  const [gains, setGains] = useState({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
-  const [workLoadCounts, setWorkLoadCounts] = useState({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
-  const [treatmentTypeCounts, setTreatmentTypeCounts] = useState(
-    {
-      "John Doe": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
-      "Angela Merkel": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
-      "Sergen Yalçın": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 }
-    })
+  const [gains, setGains] = useState(getJsons.getGains())
+  const [workLoadCounts, setWorkLoadCounts] = useState(getJsons.getWorkloads())
+  const [treatmentTypeCounts, setTreatmentTypeCounts] = useState(getJsons.getTreatments())
   const [appointments, setAppointments] = useState([])
   const [selectedDentists, setSelectedDentists] = useState([]);
   const [selectedTreatments, setSelectedTreatments] = useState([]);
@@ -77,7 +72,6 @@ export default function CalendarPage(props) {
     var events = await helpers.loadItems("", "", "", 0, 0);
     setAppointments(events);
     getStatictics(events);
-    getJsons.getGains();
   }, []);
 
 
@@ -159,14 +153,9 @@ export default function CalendarPage(props) {
     setWorkDayCount(workDayCount)
 
 
-    var tempGains = ({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
-    var tempWorkLoads = ({ "John Doe": 0, "Angela Merkel": 0, "Sergen Yalçın": 0 })
-    var tempTreatmentCounts = (
-      {
-        "John Doe": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
-        "Angela Merkel": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 },
-        "Sergen Yalçın": { "Kanal tedavisi": 0, "Diş beyazlatma": 0, "Diş bakımı": 0 }
-      })
+    var tempGains = (getJsons.getGains())
+    var tempWorkLoads = (getJsons.getWorkloads())
+    var tempTreatmentCounts = (getJsons.getTreatments())
 
 
 
@@ -191,32 +180,42 @@ export default function CalendarPage(props) {
 
 
   function getGainsText() {
-    return ("Angela Merkel : " + gains['Angela Merkel'] + " - " + "John Doe : " + gains['John Doe'] + " - " + "Sergen Yalçın : " + gains['Sergen Yalçın'])
-  }
+    var gainText="";
+    dentists.forEach(element => {
+      gainText += " | " + element.name +" : " + gains[element.name] + " | ";
+    });
+    return gainText;
+   }
 
   function getTreatmentCountText() {
-    return ("Angela Merkel : " + " Kanal tedavisi : " + treatmentTypeCounts['Angela Merkel']['Kanal tedavisi']
-      + " - Diş Bakımı : " + treatmentTypeCounts['Angela Merkel']['Diş bakımı']
-      + " - Diş beyazlatma : " + treatmentTypeCounts['Angela Merkel']['Diş beyazlatma']
-
-      + " ||| John Doe : " + " Kanal tedavisi : " + treatmentTypeCounts['John Doe']['Kanal tedavisi']
-      + " - Diş Bakımı : " + treatmentTypeCounts['John Doe']['Diş bakımı']
-      + " - Diş beyazlatma : " + treatmentTypeCounts['John Doe']['Diş beyazlatma']
-
-      + " ||| Sergen Yalçın : " + " Kanal tedavisi : " + treatmentTypeCounts['Sergen Yalçın']['Kanal tedavisi']
-      + " - Diş Bakımı : " + treatmentTypeCounts['Sergen Yalçın']['Diş bakımı']
-      + " - Diş beyazlatma : " + treatmentTypeCounts['Sergen Yalçın']['Diş beyazlatma'])
+    var treatmentText="";
+    dentists.forEach(element => {
+      treatmentText += " | " + element.name + " : ";
+      treatments.forEach(treatmentElement =>
+        {
+          treatmentText += " | " + treatmentElement.name +" : " + treatmentTypeCounts[element.name][treatmentElement.name] + "\n";
+        })
+     
+    });
+    return treatmentText;
   }
 
 
   function getWorkLoadCountText() {
+    var workDayText="";
     if (workDayCount !== 0) {
-      return ("Angela Merkel : " + 100 * parseInt(workLoadCounts['Angela Merkel']) / (workDayCount * 7) + " - " + "John Doe : " + 100 * parseInt(workLoadCounts['John Doe']) / (workDayCount * 7) + " - " + "Sergen Yalçın : " + 100 * parseInt(workLoadCounts['Sergen Yalçın']) / (workDayCount * 7));
-
+      dentists.forEach(element => {
+        workDayText += " | " + element.name +" : " + 100 * parseInt(workLoadCounts[element.name]) / (workDayCount * 7) + " | ";
+      });
+      return workDayText;
+  
     }
     else {
-      return ("Angela Merkel : " + workLoadCounts['Angela Merkel'] + " - " + "John Doe : " + workLoadCounts['John Doe'] + " - " + "Sergen Yalçın : " + workLoadCounts['Sergen Yalçın']);
+      dentists.forEach(element => {
+        workDayText += " | " + element.name +" : " +workLoadCounts[element.name] + " | ";
+      });
 
+      return workDayText;
     }
   }
 
@@ -327,7 +326,7 @@ export default function CalendarPage(props) {
 
         <div className='choose-dentist'>
           <Multiselect
-            options={getDentists.get()} // Options to display in the dropdown
+            options={dentists} // Options to display in the dropdown
             selectedValues={selectedDentists} // Preselected value to persist in dropdown
             onSelect={onSelectDentistFunction} // Function will trigger on select event
             onRemove={onRemoveDentistFunction} // Function will trigger on remove event
@@ -339,7 +338,7 @@ export default function CalendarPage(props) {
         <div className='choose-treatment'>
 
           <Multiselect
-            options={getTreatments.get()} // Options to display in the dropdown
+            options={treatments} // Options to display in the dropdown
             selectedValues={selectedTreatments} // Preselected value to persist in dropdown
             onSelect={onSelectTreatmentFunction} // Function will trigger on select event
             onRemove={onRemoveTreatmentFunction} // Function will trigger on remove event
@@ -351,21 +350,13 @@ export default function CalendarPage(props) {
           APPLY
         </Button>
 
-        <form>
-          <label>
-            {"Gains: " + getGainsText()}
-          </label>
-        </form>
+        
         <form>
           <label>
             {"Treatments: " + getTreatmentCountText()}
           </label>
         </form>
-        <form>
-          <label>
-            {"Workload: " + getWorkLoadCountText()}
-          </label>
-        </form>
+       
 
 
       </div>
@@ -416,12 +407,12 @@ export default function CalendarPage(props) {
                 border: "none"
               };
 
-              if (event.doctor.full_name == "Sergen Yalçın") {
+              if (event.doctor.full_name == "Sena Güzel") {
                 newStyle.backgroundColor = "rgb(177 75 83)"
 
 
               }
-              else if (event.doctor.full_name == "John Doe") {
+              else if (event.doctor.full_name == "Halil Biricik") {
                 newStyle.backgroundColor = "#56CCF2"
 
               } else {
