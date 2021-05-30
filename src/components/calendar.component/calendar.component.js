@@ -69,10 +69,10 @@ export default function CalendarPage(props) {
   const [totalAppointmentCount, setTotalAppointmentCount] = useState(0)
   const [tempEvent, setTempEvent] = useState({})
   const nowDate = new Date();
-
   const [deleteModal, setDeleteModal] = useState(false);
-  const [dentist, setDentist] = useState("");
-
+  const [dentistModal, setDentistModal] = useState("");
+  const [removeDateBegin, setRemoveDateBegin] = useState(null)
+  const [removeDateEnd, setRemoveDateEnd] = useState(null)
   const [statisticsModal, setStatisticsModal] = useState(false);
 
 
@@ -102,6 +102,19 @@ export default function CalendarPage(props) {
     setSelectedDateEnd(endDate)
   }
 
+  
+  const handleRemoveStartDateChange = (date) => {
+    var startDate = new Date(date);
+    startDate.setHours(0, 0, 0, 0);
+    setRemoveDateBegin(startDate)
+  }
+
+  const handleRemoveEndDateChange = (date) => {
+    var endDate = new Date(date);
+    endDate.setHours(23, 59, 0, 0);
+    setRemoveDateEnd(endDate)
+  }
+
   const handleClose = () => {
     setOpenModal(false)
   }
@@ -114,8 +127,8 @@ export default function CalendarPage(props) {
     setStatisticsModal(false)
   }
 
-  const handleDentistChange = (dentist) => {
-    setDentist(dentist);
+  const handleDentistModalChange = (dentist) => {
+    setDentistModal(dentist);
   }
 
 
@@ -258,6 +271,19 @@ export default function CalendarPage(props) {
     await helpers.updateAppointment(json);
   }
 
+  async function removeAppointmentsWithChange()
+  {
+    if(Boolean(removeDateBegin) && Boolean(removeDateEnd)  && Boolean(dentistModal))
+    {
+      await helpers.removeAppointmentsWithRange(removeDateBegin.getTime(), removeDateEnd.getTime(), dentistModal);
+    }
+    else
+    {
+      alert("There exists empty inputs !")
+    }
+  
+  }
+
   function getProgressBarView(item) {
     const BorderLinearProgressDentist = withStyles((theme) => ({
       root: {
@@ -297,11 +323,6 @@ export default function CalendarPage(props) {
       </div>
     );
   }
-
-
-
-
-
 
 
   return (
@@ -401,11 +422,12 @@ export default function CalendarPage(props) {
               disableToolbar
               variant='inline'
               format='MM/dd/yyyy'
+              minDate={new Date()}
               margin='normal'
               id='date-picker-inline'
               label='Start Date'
-              value={selectedDateBegin}
-              onChange={handleStartDateChange}
+              value={removeDateBegin}
+              onChange={handleRemoveStartDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
@@ -414,11 +436,12 @@ export default function CalendarPage(props) {
               disableToolbar
               variant='inline'
               format='MM/dd/yyyy'
+              minDate={new Date()}
               margin='normal'
               id='date-picker-inline'
               label='End Date'
-              value={selectedDateEnd}
-              onChange={handleEndDateChange}
+              value={removeDateEnd}
+              onChange={handleRemoveEndDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
@@ -429,17 +452,17 @@ export default function CalendarPage(props) {
         <p className="form-titles">Dentist</p>
         <Select
           className="type-of-treatment"
-          value={dentist}
+          value={dentistModal}
           margin="normal"
           variant="outlined"
-          onChange={(event) => { handleDentistChange(event.target.value) }}
+          onChange={(event) => { handleDentistModalChange(event.target.value) }}
         >
            {dentists.map((item, index) =>
             <MenuItem value={item.name}>{item.name}</MenuItem>
           )}
          
         </Select>
-        <Button variant="contained" color="secondary" style={{marginTop:"20px",marginBottom:"10px"}}>
+        <Button variant="contained" color="secondary" style={{marginTop:"20px",marginBottom:"10px"}} onClick={()=> removeAppointmentsWithChange()}>
           Remove
         </Button>
          </div>

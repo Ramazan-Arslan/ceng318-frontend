@@ -108,6 +108,34 @@ const helpers = {
         else {
             alert("Error occured")
         }
+    },
+
+    removeAppointmentsWithRange: async function (startDate, endDate, dentist) {
+
+        const events = await this.getAppointments();
+
+        if (Boolean(events)) {
+            await events.map(async (e) => {
+                var start = this.getStartDate(e.date, e.hour);
+                var end = this.getEndDate(e.date, e.hour);
+                if (dentist === (e.doctor.full_name)) {
+                    if (((startDate !== 0 && endDate !== 0) && startDate <= start.getTime() && end.getTime() <= endDate)) {
+
+                        var path = "/api/v1/delete/appointment/" + e.id;
+                        const isTrue = await postRequest(path, null);
+                        console.log(isTrue)
+                        if (!isTrue) {
+                            console.log("Not removed : ", e)
+                        }
+                    }
+
+                }
+            })
+
+            alert("Process is finished")
+            window.location.reload(true);
+
+        }
     }
 };
 
