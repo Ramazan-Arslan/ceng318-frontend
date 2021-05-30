@@ -13,46 +13,14 @@ import Grid from '@material-ui/core/Grid'
 import DateFnsUtils from '@date-io/date-fns'
 import { MuiPickersUtilsProvider, KeyboardDatePicker, } from '@material-ui/pickers'
 import helpers from './calendar-component-helper'
-import LinearProgress from '@material-ui/core/LinearProgress';
-const BorderLinearProgressDentist1 = withStyles((theme) => ({
-  root: {
-    height: 25,
-    borderRadius: 5,
-  },
-  colorPrimary: {
-    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: "#FFE4E6",
-  },
-}))(LinearProgress);
-const BorderLinearProgressDentist2 = withStyles((theme) => ({
-  root: {
-    height: 25,
-    borderRadius: 5,
-  },
-  colorPrimary: {
-    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: "#56CCF2",
-  },
-}))(LinearProgress);
-const BorderLinearProgressDentist3 = withStyles((theme) => ({
-  root: {
-    height: 25,
-    borderRadius: 5,
-  },
-  colorPrimary: {
-    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: "#BB6BD9",
-  },
-}))(LinearProgress);
+import LinearProgress from '@material-ui/core/LinearProgress'
+import getDentists from '../../helperFunctions/getDentists'
+import getTreatments from '../../helperFunctions/getTreatments'
+import getJsons from '../../helperFunctions/getStaticticsJson'
+
+const dentists = getDentists.get();
+const treatments = getTreatments.get();
+
 
 const localizer = momentLocalizer(moment)
 const nowDate = new Date();
@@ -109,6 +77,7 @@ export default function CalendarPage(props) {
     var events = await helpers.loadItems("", "", "", 0, 0);
     setAppointments(events);
     getStatictics(events);
+    getJsons.getGains();
   }, []);
 
 
@@ -270,6 +239,40 @@ export default function CalendarPage(props) {
     await helpers.updateAppointment(json);
   }
 
+  function getProgressBarView(item) {
+    const BorderLinearProgressDentist = withStyles((theme) => ({
+      root: {
+        height: 25,
+        borderRadius: 5,
+      },
+      colorPrimary: {
+        backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+      },
+      bar: {
+        borderRadius: 5,
+        backgroundColor: item.color,
+      },
+    }))(LinearProgress);
+    return (
+      <BorderLinearProgressDentist variant="determinate" value={100 * parseInt(workLoadCounts[item.name]) / (workDayCount * 7)} />
+
+    )
+  }
+
+
+  function getBars() {
+    return (
+      <div>
+        {dentists.map((item, index) => (
+          <div className='percentage-dentist'>
+            <p className='percentage-dentist-p'>{item.name}</p>
+            {getProgressBarView(item)}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
 
 
 
@@ -324,7 +327,7 @@ export default function CalendarPage(props) {
 
         <div className='choose-dentist'>
           <Multiselect
-            options={[{ name: 'John Doe', id: 1 }, { name: 'Angela Merkel', id: 2 }, { name: 'Sergen Yalçın', id: 3 }]} // Options to display in the dropdown
+            options={getDentists.get()} // Options to display in the dropdown
             selectedValues={selectedDentists} // Preselected value to persist in dropdown
             onSelect={onSelectDentistFunction} // Function will trigger on select event
             onRemove={onRemoveDentistFunction} // Function will trigger on remove event
@@ -336,7 +339,7 @@ export default function CalendarPage(props) {
         <div className='choose-treatment'>
 
           <Multiselect
-            options={[{ name: 'Kanal tedavisi', id: 1 }, { name: 'Diş beyazlatma', id: 2 }, { name: 'Diş bakımı', id: 3 }]} // Options to display in the dropdown
+            options={getTreatments.get()} // Options to display in the dropdown
             selectedValues={selectedTreatments} // Preselected value to persist in dropdown
             onSelect={onSelectTreatmentFunction} // Function will trigger on select event
             onRemove={onRemoveTreatmentFunction} // Function will trigger on remove event
@@ -436,33 +439,7 @@ export default function CalendarPage(props) {
 
         <div className={classes.root}>
           <div className='percentage-dentist-all'>
-            <div className='percentage-dentist'>
-              <p className='percentage-dentist-p'>Sergen Yalçın</p>
-              <BorderLinearProgressDentist1 variant="determinate" value={ 100 * parseInt(workLoadCounts['Sergen Yalçın']) / (workDayCount * 7)} />
-              <form>
-                <label>
-                  {"Gain: " + gains['Sergen Yalçın']}
-                </label>
-              </form>
-            </div>
-            <div className='percentage-dentist'>
-              <p className='percentage-dentist-p'>John Doe</p>
-              <BorderLinearProgressDentist2 variant="determinate" value={ 100 * parseInt(workLoadCounts['John Doe']) / (workDayCount * 7)} />
-              <form>
-                <label>
-                  {"Gain: " + gains['John Doe']}
-                </label>
-              </form>
-            </div>
-            <div className='percentage-dentist'>
-              <p className='percentage-dentist-p'>Angela Merkel</p>
-              <BorderLinearProgressDentist3 variant="determinate" value={ 100 * parseInt(workLoadCounts['Angela Merkel']) / (workDayCount * 7)} />
-              <form>
-                <label>
-                  {"Gain: " + gains['Angela Merkel']}
-                </label>
-              </form>
-            </div>
+            {getBars()}
           </div>
         </div>
       </div>
