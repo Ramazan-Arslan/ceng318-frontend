@@ -17,6 +17,10 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import getDentists from '../../helperFunctions/getDentists'
 import getTreatments from '../../helperFunctions/getTreatments'
 import getJsons from '../../helperFunctions/getStaticticsJson'
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 const dentists = getDentists.get();
 const treatments = getTreatments.get();
@@ -66,6 +70,10 @@ export default function CalendarPage(props) {
   const [tempEvent, setTempEvent] = useState({})
   const nowDate = new Date();
 
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [dentist, setDentist] = useState("");
+
+  const [statisticsModal, setStatisticsModal] = useState(false);
 
 
   useEffect(async () => {
@@ -96,6 +104,18 @@ export default function CalendarPage(props) {
 
   const handleClose = () => {
     setOpenModal(false)
+  }
+
+  const handleDeleteModalClose = () => {
+    setDeleteModal(false)
+  }
+
+  const handleStatisticsModalClose = () => {
+    setStatisticsModal(false)
+  }
+
+  const handleDentistChange = (dentist) => {
+    setDentist(dentist);
   }
 
 
@@ -252,10 +272,15 @@ export default function CalendarPage(props) {
         backgroundColor: item.color,
       },
     }))(LinearProgress);
-    return (
-      <BorderLinearProgressDentist variant="determinate" value={100 * parseInt(workLoadCounts[item.name]) / (workDayCount * 7)} />
-
-    )
+    if(workDayCount != 0){
+      return (
+        <BorderLinearProgressDentist variant="determinate" value={100 * parseInt(workLoadCounts[item.name]) / (workDayCount * 7)} />
+  
+      )
+    }
+    else{
+      <BorderLinearProgressDentist variant="determinate" value={0 * parseInt(workLoadCounts[item.name]) / (workDayCount * 7)} />
+    }
   }
 
 
@@ -351,16 +376,95 @@ export default function CalendarPage(props) {
           APPLY
         </Button>
 
-        
-        <form>
+
+        <Button variant="contained" style={{marginTop:"20px"}} onClick={() => setStatisticsModal(true)}>
+        See Statics
+      </Button>
+
+        <Button variant="contained" color="secondary" style={{marginTop:"120px"}} startIcon={<DeleteIcon />} onClick={() => setDeleteModal(true)}>
+        Delete Appointments
+      </Button>
+      </div>
+      <Modal
+        className="delete-appointment"
+        open={deleteModal}
+        onClose={handleDeleteModalClose}
+        disablePortal
+        disableEnforceFocus
+        disableAutoFocus
+
+      >
+         <div className="delete-appointment-content">
+         <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Grid container justify='center'>
+            <KeyboardDatePicker
+              disableToolbar
+              variant='inline'
+              format='MM/dd/yyyy'
+              margin='normal'
+              id='date-picker-inline'
+              label='Start Date'
+              value={selectedDateBegin}
+              onChange={handleStartDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+            <KeyboardDatePicker
+              disableToolbar
+              variant='inline'
+              format='MM/dd/yyyy'
+              margin='normal'
+              id='date-picker-inline'
+              label='End Date'
+              value={selectedDateEnd}
+              onChange={handleEndDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </Grid>
+        </MuiPickersUtilsProvider>
+
+        <p className="form-titles">Dentist</p>
+        <Select
+          className="type-of-treatment"
+          value={dentist}
+          margin="normal"
+          variant="outlined"
+          onChange={(event) => { handleDentistChange(event.target.value) }}
+        >
+           {dentists.map((item, index) =>
+            <MenuItem value={item.name}>{item.name}</MenuItem>
+          )}
+         
+        </Select>
+        <Button variant="contained" color="secondary" style={{marginTop:"20px",marginBottom:"10px"}}>
+          Remove
+        </Button>
+         </div>
+ 
+      </Modal>
+
+
+      <Modal
+        className="statistics-modal"
+        open={statisticsModal}
+        onClose={handleStatisticsModalClose}
+        disablePortal
+        disableEnforceFocus
+        disableAutoFocus
+
+      >
+         <div className="statistics-modal-content">
+         <form>
           <label>
             {"Treatments: " + getTreatmentCountText()}
           </label>
         </form>
-       
-
-
-      </div>
+         </div>
+ 
+      </Modal>
 
 
 
@@ -451,6 +555,7 @@ export default function CalendarPage(props) {
           <h5>Patient Detail</h5>
           <p className="modal-title">Full Name</p>
           <TextField
+            className="modal-input"
             defaultValue={event.patient_name}
             margin="normal"
             variant="outlined"
@@ -458,6 +563,7 @@ export default function CalendarPage(props) {
           />
           <p className="modal-title">Phone Number</p>
           <TextField
+            className="modal-input"
             defaultValue={event.patient_phone}
             margin="normal"
             variant="outlined"
@@ -465,6 +571,7 @@ export default function CalendarPage(props) {
           />
           <p className="modal-title">Age</p>
           <TextField
+            className="modal-input"
             defaultValue={event.patient_age}
             margin="normal"
             type="number"
@@ -473,6 +580,7 @@ export default function CalendarPage(props) {
           />
           <p className="modal-title">Type of Treatment</p>
           <TextField
+            className="modal-input"
             defaultValue={event.type.type}
             margin="normal"
             variant="outlined"
@@ -481,6 +589,7 @@ export default function CalendarPage(props) {
 
           <p className="modal-title">Doctor</p>
           <TextField
+            className="modal-input"
             defaultValue={event.doctor.full_name}
             margin="normal"
             variant="outlined"
@@ -489,6 +598,7 @@ export default function CalendarPage(props) {
 
           <p className="modal-title">Hour</p>
           <TextField
+            className="modal-input"
             defaultValue={event.hour}
             margin="normal"
             variant="outlined"
@@ -496,6 +606,7 @@ export default function CalendarPage(props) {
           />
           <p className="modal-title">Description</p>
           <TextField
+            className="modal-input"
             defaultValue={event.description}
             margin="normal"
             variant="outlined"
@@ -509,9 +620,9 @@ export default function CalendarPage(props) {
               variant='contained'>
               Remove
           </Button>
-          </div>
+         
 
-          <div className="button-wrapper">
+         
             <Button className='apply-button'
               onClick={() => updateAppointment(tempEvent)}
               variant='contained'>
