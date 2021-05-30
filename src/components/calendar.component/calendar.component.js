@@ -102,7 +102,7 @@ export default function CalendarPage(props) {
     setSelectedDateEnd(endDate)
   }
 
-  
+
   const handleRemoveStartDateChange = (date) => {
     var startDate = new Date(date);
     startDate.setHours(0, 0, 0, 0);
@@ -213,40 +213,39 @@ export default function CalendarPage(props) {
 
 
   function getGainsText() {
-    var gainText="";
+    var gainText = "";
     dentists.forEach(element => {
-      gainText += " | " + element.name +" : " + gains[element.name] + " | ";
+      gainText += " | " + element.name + " : " + gains[element.name] + " | ";
     });
     return gainText;
-   }
+  }
 
   function getTreatmentCountText() {
-    var treatmentText="";
+    var treatmentText = "";
     dentists.forEach(element => {
       treatmentText += element.name + " : ";
-      treatments.forEach(treatmentElement =>
-        {
-          treatmentText += treatmentElement.name +" : " + treatmentTypeCounts[element.name][treatmentElement.name] + "  ";
-        })
+      treatments.forEach(treatmentElement => {
+        treatmentText += treatmentElement.name + " : " + treatmentTypeCounts[element.name][treatmentElement.name] + "  ";
+      })
       treatmentText += " ~~~~ "
-     
+
     });
     return treatmentText;
   }
 
 
   function getWorkLoadCountText() {
-    var workDayText="";
+    var workDayText = "";
     if (workDayCount !== 0) {
       dentists.forEach(element => {
-        workDayText += " | " + element.name +" : " + 100 * parseInt(workLoadCounts[element.name]) / (workDayCount * 7) + " | ";
+        workDayText += " | " + element.name + " : " + 100 * parseInt(workLoadCounts[element.name]) / (workDayCount * 7) + " | ";
       });
       return workDayText;
-  
+
     }
     else {
       dentists.forEach(element => {
-        workDayText += " | " + element.name +" : " +workLoadCounts[element.name] + " | ";
+        workDayText += " | " + element.name + " : " + workLoadCounts[element.name] + " | ";
       });
 
       return workDayText;
@@ -272,17 +271,14 @@ export default function CalendarPage(props) {
     await helpers.updateAppointment(json);
   }
 
-  async function removeAppointmentsWithChange()
-  {
-    if(Boolean(removeDateBegin) && Boolean(removeDateEnd)  && Boolean(dentistModal))
-    {
+  async function removeAppointmentsWithChange() {
+    if (Boolean(removeDateBegin) && Boolean(removeDateEnd) && Boolean(dentistModal)) {
       await helpers.removeAppointmentsWithRange(removeDateBegin.getTime(), removeDateEnd.getTime(), dentistModal);
     }
-    else
-    {
+    else {
       alert("There exists empty inputs !")
     }
-  
+
   }
 
   function getProgressBarView(item) {
@@ -299,13 +295,13 @@ export default function CalendarPage(props) {
         backgroundColor: item.color,
       },
     }))(LinearProgress);
-    if(workDayCount != 0){
+    if (workDayCount != 0) {
       return (
         <BorderLinearProgressDentist variant="determinate" value={100 * parseInt(workLoadCounts[item.name]) / (workDayCount * 7)} />
-  
+
       )
     }
-    else{
+    else {
       <BorderLinearProgressDentist variant="determinate" value={0 * parseInt(workLoadCounts[item.name]) / (workDayCount * 7)} />
     }
   }
@@ -317,7 +313,7 @@ export default function CalendarPage(props) {
         {dentists.map((item, index) => (
           <div className='percentage-dentist'>
             <div className="p-wrapper"><p className='percentage-dentist-p'>{item.name}</p>
-            <p className='dentinst-gain'>{"₺"+gains[item.name]}</p></div>
+              <p className='dentinst-gain'>{"₺" + gains[item.name]}</p></div>
             {getProgressBarView(item)}
           </div>
         ))}
@@ -401,13 +397,13 @@ export default function CalendarPage(props) {
 
 
           <Button className='buttonfilter' variant="contained" onClick={() => setStatisticsModal(true)}>
-          See Statics
+            See Statics
         </Button>
 
           <Button className='buttonfilter' variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={() => setDeleteModal(true)}>
-          Delete Appointments
+            Delete Appointments
         </Button>
-      </div>
+        </div>
       </div>
       <Modal
         className="delete-appointment"
@@ -418,58 +414,58 @@ export default function CalendarPage(props) {
         disableAutoFocus
 
       >
-         <div className="delete-appointment-content">
-         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid container justify='center'>
-            <KeyboardDatePicker
-              disableToolbar
-              variant='inline'
-              format='MM/dd/yyyy'
-              minDate={new Date()}
-              margin='normal'
-              id='date-picker-inline'
-              label='Start Date'
-              value={removeDateBegin}
-              onChange={handleRemoveStartDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-            <KeyboardDatePicker
-              disableToolbar
-              variant='inline'
-              format='MM/dd/yyyy'
-              minDate={new Date()}
-              margin='normal'
-              id='date-picker-inline'
-              label='End Date'
-              value={removeDateEnd}
-              onChange={handleRemoveEndDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </Grid>
-        </MuiPickersUtilsProvider>
+        <div className="delete-appointment-content">
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify='center'>
+              <KeyboardDatePicker
+                disableToolbar
+                variant='inline'
+                format='MM/dd/yyyy'
+                minDate={new Date()}
+                margin='normal'
+                id='date-picker-inline'
+                label='Start Date'
+                value={removeDateBegin}
+                onChange={handleRemoveStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+              <KeyboardDatePicker
+                disableToolbar
+                variant='inline'
+                format='MM/dd/yyyy'
+                minDate={new Date()}
+                margin='normal'
+                id='date-picker-inline'
+                label='End Date'
+                value={removeDateEnd}
+                onChange={handleRemoveEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
 
-        <p className="form-titles">Dentist</p>
-        <Select
-          className="type-of-treatment"
-          value={dentistModal}
-          margin="normal"
-          variant="outlined"
-          onChange={(event) => { handleDentistModalChange(event.target.value) }}
-        >
-           {dentists.map((item, index) =>
-            <MenuItem value={item.name}>{item.name}</MenuItem>
-          )}
-         
-        </Select>
-        <Button variant="contained" color="secondary" style={{marginTop:"20px",marginBottom:"10px"}} onClick={()=> removeAppointmentsWithChange()}>
-          Remove
+          <p className="form-titles">Dentist</p>
+          <Select
+            className="type-of-treatment"
+            value={dentistModal}
+            margin="normal"
+            variant="outlined"
+            onChange={(event) => { handleDentistModalChange(event.target.value) }}
+          >
+            {dentists.map((item, index) =>
+              <MenuItem value={item.name}>{item.name}</MenuItem>
+            )}
+
+          </Select>
+          <Button variant="contained" color="secondary" style={{ marginTop: "20px", marginBottom: "10px" }} onClick={() => removeAppointmentsWithChange()}>
+            Remove
         </Button>
-         </div>
- 
+        </div>
+
       </Modal>
 
 
@@ -482,14 +478,14 @@ export default function CalendarPage(props) {
         disableAutoFocus
 
       >
-         <div className="statistics-modal-content">
-         <form>
-          <label>
-            {"Treatments: " +  getTreatmentCountText()}
-          </label>
-        </form>
-         </div>
- 
+        <div className="statistics-modal-content">
+          <form>
+            <label>
+              {"Treatments: " + getTreatmentCountText()}
+            </label>
+          </form>
+        </div>
+
       </Modal>
 
 
@@ -613,6 +609,15 @@ export default function CalendarPage(props) {
             disabled
           />
 
+          <p className="modal-title">Price</p>
+          <TextField
+            className="modal-input"
+            defaultValue={event.type.price}
+            margin="normal"
+            variant="outlined"
+            disabled
+          />
+
           <p className="modal-title">Doctor</p>
           <TextField
             className="modal-input"
@@ -646,9 +651,9 @@ export default function CalendarPage(props) {
               variant='contained'>
               Remove
           </Button>
-         
 
-         
+
+
             <Button className='apply-button'
               onClick={() => updateAppointment(tempEvent)}
               variant='contained'>

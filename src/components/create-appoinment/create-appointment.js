@@ -288,7 +288,6 @@ export default function CreateAppointment() {
         <p className="form-titles">Phone Number</p>
         <TextField
           defaultValue={phoneNumber}
-          type="number"
           margin="normal"
           variant="outlined"
           onChange={(event) => { handlePhoneNumberChange(event.target.value) }} />

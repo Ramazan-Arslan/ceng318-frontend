@@ -5,7 +5,6 @@ const postRequest = async (path, json) => {
    var address = getHostAddress();
    var returnedData = null;
    var token = localStorage.getItem("token");
-   console.log(address+path)
 
    if(Boolean(token))
    {
