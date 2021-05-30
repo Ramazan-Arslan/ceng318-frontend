@@ -9,13 +9,13 @@ import { LocalDiningOutlined } from '@material-ui/icons'
 const routes = [
   {
     key: 1,
-    name: 'Calendar',
-    path: '/calendar',
+    name: 'CALENDER',
+    path: '/',
     component: CalendarPage,
   },
   {
     key: 2,
-    name: 'Create Appointment',
+    name: 'CREATE APPOINTMENT',
     path: '/createAppointment',
     component: CreateAppointment,
   },
@@ -49,7 +49,7 @@ export default function Header() {
   return (
     <div className='header'>
       <div className='left-part'>
-        <p className='logo'>CENG318</p>
+        <p className='logo'>Dissci Mahmut</p>
         <Router>
           {routes.map((route) => (
             <p className='route'>

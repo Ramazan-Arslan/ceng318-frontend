@@ -158,12 +158,21 @@ display: none;
 }
 
 .percentage-dentist{
-  margin: 5px 20px;
-  width: 25ch !important;
+  width: 23ch !important;
 }
-.percentage-dentist-p{
+
+.p-wrapper{
   color: black;
   font-size: 14px;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
 }
+.bar-wrapper{
+  min-width: 1150px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
 

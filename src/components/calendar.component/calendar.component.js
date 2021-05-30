@@ -261,10 +261,11 @@ export default function CalendarPage(props) {
 
   function getBars() {
     return (
-      <div>
+      <div className="bar-wrapper">
         {dentists.map((item, index) => (
           <div className='percentage-dentist'>
-            <p className='percentage-dentist-p'>{item.name}</p>
+            <div className="p-wrapper"><p className='percentage-dentist-p'>{item.name}</p>
+            <p className='dentinst-gain'>{"₺"+gains[item.name]}</p></div>
             {getProgressBarView(item)}
           </div>
         ))}
@@ -380,7 +381,7 @@ export default function CalendarPage(props) {
           }}
           startAccessor='start'
           endAccessor='end'
-          style={{ height: 550, width: 1150 }}
+          style={{ height: 525, width: 1150 }}
           min={
             new Date(
               nowDate.getFullYear(),
